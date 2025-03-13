@@ -1,0 +1,21 @@
+{% extends 'app/base.html' %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block body %}
+    <p>inclusion</p>
+    <form id="register" method="post" action="{%url 'app:signup' %}" enctype="multipart/form-data">
+        <h1>Sign Up</h1>
+        <p>Already have an account? Try to <a href="{% url 'app:login' %}">log in</a></p>
+
+        {% csrf_token %}
+        Email: <input type="email" name="email" type="submit" size="50"/><br /> 
+        Confirm Email: <input type="email" name="email_confirmation" type="submit" size="50"/><br />
+        Password: <input type="password" name="password" type="submit" size="50"/><br /> 
+        Confirm Password: <input type="password" name="password_confirmation" type="submit" size="50"/><br />
+
+        <input type="submit" name="submit" value="Done"/>
+    </form>
+{% endblock %}
