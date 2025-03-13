@@ -1,4 +1,3 @@
-#! the hashbang marks points of interest in this file. delete this if there are none remaining.
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -7,7 +6,7 @@ class UserProfile(models.Model):
 
     email = models.CharField(max_length=320)
 
-    user = models.OneToOneField(User, on_delete = models.CASCADE) #mapping a UserProfile to a user model instance
+    user = models.OneToOneField(User, on_delete = models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -16,6 +15,9 @@ class UserProfile(models.Model):
 class Category(models.Model):
 
     name = models.CharField(max_length=64, unique=True)
+    is_fun = models.BooleanField(default=True)
+
+    created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE) ## how do we ensure that only the creator (and admins) can delete a category?
 
     def __str__(self):
         return self.name
@@ -29,11 +31,11 @@ class Quiz(models.Model):
     dislikes = models.IntegerField(default=0)
     creation_date = models.DateField(auto_now_add=True)
 
-    category = models.ForeignKey(Category, on_delete=models.PROTECT) #!categories with 1 or more quizzes now cannot be deleted - do we want this? if not, change PROTECT to SET_NULL.
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL) ## better if we have explicit handling for deleting categories with one or more quiz - or maybe have a 'miscellaneous' section for quizzes with null category
     created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.name #!what if two quizzes have the same name. add creation date?
+        return self.name
     
 
 class StarRating(models.Model):
@@ -48,7 +50,7 @@ class StarRating(models.Model):
 class Slide(models.Model):
 
     question = models.CharField(max_length=256)
-    image_url = models.URLField() #! changed from Char(128) on the design spec - should we use ImageField instead?
+    image_url = models.URLField() ## changed from Char(128) on the design spec - should we use ImageField instead?
 
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
 
