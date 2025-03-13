@@ -13,7 +13,7 @@ def login(request):
 
 def signup(request):
     context = {'boldmessage': 'signup'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/signup.html', context)
 
 def account(request):
     ## Gonna leave the account urls up to whoever does it
