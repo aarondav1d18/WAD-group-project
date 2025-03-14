@@ -14,6 +14,7 @@ body {
     gap: 20px;
     width: 90%;
     max-width: 1200px;
+    align-items: flex-start; /* Prevent stretching */
 }
 
 .quiz-section {
@@ -23,24 +24,28 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    max-height: 80vh; /* Keeps it within the viewport */
+    display: flex;
+    flex-direction: column;
 }
 
 h2 {
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .quiz-container {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Dynamically adjusts */
+    gap: 20px;
     padding: 10px;
-    white-space: nowrap;
+    max-height: 50vh; /* When content overflows, it scrolls */
+    overflow-y: auto;
 }
 
 .quiz-card {
-    min-width: 150px;
-    max-width: 150px;
+    width: 100%;
+    max-width: 180px;
     height: 200px;
     background: #ddd;
     display: flex;
@@ -50,4 +55,5 @@ h2 {
     border-radius: 5px;
     text-align: center;
     padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
