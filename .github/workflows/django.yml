@@ -8,24 +8,37 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
       matrix:
-        python-version: [3.8, 3.9, 3.10.0, 3.11, 3.12]
+        python-version: [3.8, 3.9, 3.10, 3.11, 3.12]  # Ensuring no '3.1'
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Debug Python Version
+      run: echo "Running setup for Python ${{ matrix.python-version }}"
+
+    - name: Debug Environment Variables
+      run: env | grep python
+
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        cache: false  # Temporarily disable caching
+
+    - name: Verify Installed Python Version
+      run: python --version
+
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
     - name: Run Tests
       run: |
-        cd Quizzical/
+        cd Quizzical || exit 1
         python manage.py test
+
