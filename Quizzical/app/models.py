@@ -26,13 +26,12 @@ class Category(models.Model):
 class Quiz(models.Model):
 
     name = models.CharField(max_length=64)
-    views = models.IntegerField(default=0) 
-    ## need to figure out how to deal with star ratings - hold an average? hold all the star ratings?
-    dislikes = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
     creation_date = models.DateField(auto_now_add=True)
+    ## star rating will be displayed as an average on the website. access and calculate using <quiz>.ratings.all()
 
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL) ## better if we have explicit handling for deleting categories with one or more quiz - or maybe have a 'miscellaneous' section for quizzes with null category
-    created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name="quizzes", on_delete=models.SET_NULL) ## better if we have explicit handling for deleting categories with one or more quiz - or maybe have a 'miscellaneous' section for quizzes with null category
+    created_by = models.ForeignKey(UserProfile,related_name="quizzes", on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
@@ -43,8 +42,8 @@ class StarRating(models.Model):
     CHOICES = [(i, str(i)) for i in range(6)]
     stars = models.IntegerField(choices = CHOICES)
 
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    profile = models.ForeignKey(UserProfile, related_name="ratings", on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, related_name="ratings", on_delete=models.CASCADE)
 
 
 class Question(models.Model):
@@ -52,7 +51,7 @@ class Question(models.Model):
     question = models.CharField(max_length=256)
     image_url = models.URLField() ## changed from Char(128) on the design spec - should we use ImageField instead?
 
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, related_name="questions", on_delete=models.CASCADE)
 
 
 class Answer(models.Model):
@@ -60,5 +59,5 @@ class Answer(models.Model):
     text = models.CharField(max_length=64)
     is_correct = models.BooleanField(default=False)
 
-    slide = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name="answers", on_delete=models.CASCADE)
 
