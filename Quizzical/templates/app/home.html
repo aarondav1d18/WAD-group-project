@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzes</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-section">
+            <h2>Top Rated Educational Quizzes</h2>
+            <div class="quiz-container" id="educational-quizzes"></div>
+        </div>
+        <div class="quiz-section">
+            <h2>Top Rated Fun Quizzes</h2>
+            <div class="quiz-container" id="fun-quizzes"></div>
+        </div>
+    </div>
+    <script src="{% static 'javascript/home.js' %}"></script>
+</body>
+</html>

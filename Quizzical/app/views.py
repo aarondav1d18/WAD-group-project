@@ -5,7 +5,7 @@ def home(request):
     ## Using empty context for now and base.html just to set up
     ## the views and urls
     context = {'boldmessage': 'home'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/home.html', context)
 
 def login(request):
     context = {'boldmessage': 'login'}
