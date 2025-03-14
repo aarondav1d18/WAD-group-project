@@ -47,7 +47,7 @@ class StarRating(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
 
 
-class Slide(models.Model):
+class Question(models.Model):
 
     question = models.CharField(max_length=256)
     image_url = models.URLField() ## changed from Char(128) on the design spec - should we use ImageField instead?
@@ -60,5 +60,5 @@ class Answer(models.Model):
     text = models.CharField(max_length=64)
     is_correct = models.BooleanField(default=False)
 
-    slide = models.ForeignKey(Slide, on_delete=models.CASCADE)
+    slide = models.ForeignKey(Question, on_delete=models.CASCADE)
 
