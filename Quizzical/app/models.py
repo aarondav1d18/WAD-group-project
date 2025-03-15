@@ -35,7 +35,6 @@ class Quiz(models.Model):
     name = models.CharField(max_length=64)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
-    stars = models.StarRating(models.Model)
     dislikes = models.IntegerField(default=0)
     creation_date = models.DateField(auto_now_add=True)
     category = models.ForeignKey(
@@ -60,19 +59,14 @@ class Quiz(models.Model):
 
 
 class StarRating(models.Model):
-    stars = models.FloatField(default=0) # Allow for 0.5 ratings
-    num_ratings = models.IntegerField(default=0)
+    CHOICES = [(i, str(i)) for i in range(6)]
+    stars = models.IntegerField(choices=CHOICES)
     profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="ratings"
     )
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="ratings")
 
-    def update_rating(self, new_rating):
-        # Equation to update average rating based on new input
-        self.stars = (self.stars * self.num_ratings + new_rating) / (self.num_ratings + 1)
-        self.num_ratings += 1
-        self.save()
-    
+
 class Slide(models.Model):
     question = models.CharField(max_length=256)
     image = models.ImageField(upload_to="slides/images/", blank=True, null=True)
