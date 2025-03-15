@@ -49,23 +49,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedCategory = document.getElementById("category-filter").value;
     const sortBy = document.getElementById("sort-filter").value;
   
+    // Update the heading based on the selected category
+    const heading = document.getElementById("quizzes-heading");
+    if (selectedCategory === "all") {
+      heading.textContent = "All Quizzes";
+    } else {
+      heading.textContent = `${selectedCategory} Quizzes`;
+    }
+  
+    // Filter and sort as before
     let filteredQuizzes = quizzes.filter(quiz => {
-      // Filter by title (search)
       const matchesSearch = quiz.title.toLowerCase().includes(searchValue);
-      // Filter by category (if not "all")
-      const matchesCategory = (selectedCategory === "all") ||
+      const matchesCategory =
+        selectedCategory === "all" ||
         (quiz.category && quiz.category.toLowerCase() === selectedCategory.toLowerCase());
       return matchesSearch && matchesCategory;
     });
   
-    // Sorting: top rated or newest (by creation_date)
+    // Sort by rating or date
     if (sortBy === "top") {
       filteredQuizzes.sort((a, b) => b.rating - a.rating);
     } else if (sortBy === "newest") {
       filteredQuizzes.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date));
     }
   
-    // Create quiz cards dynamically
+    // Create quiz cards
     filteredQuizzes.forEach(quiz => {
       let quizCard = document.createElement("div");
       quizCard.classList.add("quiz-card");
@@ -78,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
       container.appendChild(quizCard);
     });
   }
+  
   
   // Populate the category filter dropdown with unique categories from the quiz list
   function populateCategoryFilter() {
