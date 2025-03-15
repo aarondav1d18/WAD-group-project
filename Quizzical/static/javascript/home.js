@@ -1,32 +1,15 @@
-// These are placeholders to test the animations and visuals will change for database integration
-const educationalQuizzes = [
-    { title: "Math Quiz", image: "/static/images/img1.jpg", rating: 1.5 },
-    { title: "History Quiz", image: "/static/images/img2.jpg", rating: 2.5 },
-    { title: "Science Quiz", image: "/static/images/img3.jpg", rating: 3.5 },
-    { title: "Compsci Quiz", image: "/static/images/img1.jpg", rating: 4.5 },
-    { title: "Business Quiz", image: "/static/images/img2.jpg", rating: 5 },
-    { title: "English Quiz", image: "/static/images/img3.jpg", rating: 1 }
-];
-
-const funQuizzes = [
-    { title: "Movie Trivia", image: "/static/images/img4.jpg", rating: 1.5 },
-    { title: "Music Quiz", image: "/static/images/img5.jpg", rating: 2.5 },
-    { title: "Sports Quiz", image: "/static/images/img6.jpg", rating: 3.5 }
-];
-
 // Open popup function with smooth animation
 function openPopup(quiz) {
     const popup = document.getElementById("quiz-popup");
     document.getElementById("quiz-title").innerText = quiz.title;
     document.getElementById("quiz-image").src = quiz.image;
-
-    popup.classList.add("show"); // Add class for animation
+    popup.classList.add("show"); // Show with animation
 }
 
-// Close popup function with smooth animation
+// Close popup function with animation
 document.querySelector(".close-btn").addEventListener("click", () => {
     const popup = document.getElementById("quiz-popup");
-    popup.classList.remove("show"); // Remove class to trigger fade-out
+    popup.classList.remove("show"); // Hide with animation
 });
 
 // Generate star ratings dynamically
@@ -44,12 +27,12 @@ function generateStars(rating) {
     return stars;
 }
 
-// Load quizzes into their respective sections
+// Load quizzes dynamically from Django context
 function loadQuizzes(category, containerId) {
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container || !quizzes[category]) return;
 
-    category.forEach(quiz => {
+    quizzes[category].forEach(quiz => {
         let quizCard = document.createElement("div");
         quizCard.classList.add("quiz-card");
 
@@ -65,8 +48,8 @@ function loadQuizzes(category, containerId) {
     });
 }
 
-// Load quizzes on page load
+// Load quizzes from Django data when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-    loadQuizzes(educationalQuizzes, "educational-quizzes");
-    loadQuizzes(funQuizzes, "fun-quizzes");
+    loadQuizzes("educational", "educational-quizzes");
+    loadQuizzes("fun", "fun-quizzes");
 });
