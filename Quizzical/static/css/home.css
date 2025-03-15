@@ -1,3 +1,4 @@
+/* Full-page glassy background */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,59 +7,80 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: white;
+    /*This colour for now to test the glassy elements*/
+    background: rgba(0, 0, 0, 0.822);
+    color: white;
 }
 
+/* Container holding the quizzes */
 .container {
     display: flex;
     gap: 20px;
     width: 90%;
     max-width: 1200px;
-    align-items: flex-start; /* Prevent stretching */
+    align-items: flex-start;
 }
 
+/* Glassy quiz sections */
 .quiz-section {
     flex: 1;
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.15); /* Light glass effect */
+    backdrop-filter: blur(10px); /* Blurred glass */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.2), /* Inner glow */
+                0 4px 10px rgba(0, 0, 0, 0.3); /* Outer shadow */
     overflow: hidden;
-    max-height: 80vh; /* Keeps it within the viewport */
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
 }
 
+/* Quiz Titles */
 h2 {
     text-align: center;
     margin-bottom: 10px;
+    color: #e0e0e0;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
+/* Quiz Grid */
 .quiz-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Dynamically adjusts */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 20px;
     padding: 10px;
-    max-height: 50vh; /* When content overflows, it scrolls */
+    max-height: 50vh;
     overflow-y: auto;
 }
 
+/* Glassy Quiz Cards */
 .quiz-card {
     width: 100%;
-    max-width: 160px;
-    height: 220px; /* Increased height for star rating */
-    background: #ddd;
+    max-width: 180px;
+    height: 240px;
+    background: rgba(255, 255, 255, 0.2); /* More transparency */
+    backdrop-filter: blur(8px); /* Soft blur */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 5px;
+    border-radius: 12px;
     text-align: center;
     padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.1),
+                0 2px 10px rgba(0, 0, 0, 0.2);
     position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Hover effect */
+.quiz-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Star Ratings */
 .star-rating {
     display: flex;
     justify-content: center;
@@ -74,18 +96,94 @@ h2 {
 }
 
 .star::before {
-    content: "☆"; /* Default empty star */
+    content: "☆";
     position: absolute;
     font-size: 18px;
+    color: white;
 }
 
 .star.full::before {
-    content: "★"; /* Full star */
+    content: "★";
+    color: gold;
 }
 
 .star.half::before {
-    content: "★"; /* Half star overlay */
+    content: "★";
     position: absolute;
     width: 50%;
     overflow: hidden;
+    color: gold;
 }
+
+/* 
+Popup Modal 
+Going to be used to save quizzes and start them
+*/
+.popup {
+    visibility: hidden; /* Initially hidden */
+    opacity: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+}
+
+/* Show popup with animation */
+.popup.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Popup Content */
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup img {
+    width: 80%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.popup-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.start-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.save-btn {
+    background-color: #FF9800;
+    color: white;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
