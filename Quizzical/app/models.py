@@ -34,8 +34,6 @@ class Category(models.Model):
 class Quiz(models.Model):
     name = models.CharField(max_length=64)
     views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
     creation_date = models.DateField(auto_now_add=True)
     category = models.ForeignKey(
         Category,
