@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 
 
 class UserProfile(models.Model):
@@ -75,3 +75,13 @@ class Answer(models.Model):
     text = models.CharField(max_length=64)
     is_correct = models.BooleanField(default=False)
     slide = models.ForeignKey(Slide, on_delete=models.CASCADE, related_name="answers")
+
+    def clean(self):
+        if self.slide.answers.count() >= 4 and self.pk is None:
+            raise ValidationError("A question can only have 4 answers")
+            #this error must be handled in the quiz creation page. 
+            #we dont want the whole site to break if someone just tries to add an extra answer
+        
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(self, *args, **kwargs)
