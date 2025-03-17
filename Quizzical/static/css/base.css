@@ -34,8 +34,8 @@ body {
 }
 
 #footer {
-    padding-left: 25px;
     width: 100%;
+    padding: 0;
     background-color: teal;
     color: white;
     text-align: left;
