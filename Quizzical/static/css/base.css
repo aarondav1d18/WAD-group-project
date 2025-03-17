@@ -1,0 +1,41 @@
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#home_button {
+    color: white;
+    text-decoration: none;
+}
+
+#header {
+    padding-left: 25px;
+    background-color: teal;
+    position: fixed;
+    height: 80px;
+    width: 100%;
+}
+
+#main {
+    width: 100%;
+    background-color: beige;
+    position: fixed;
+    top: 80px;
+    bottom: 0;
+}
+
+#footer {
+    padding-left: 25px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: teal;
+    color: white;
+    text-align: left;
+}
