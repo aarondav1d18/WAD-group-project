@@ -8,19 +8,19 @@ body {
     margin: 0;
 }
 
-#home_button {
+.header-text {
     color: white;
     text-decoration: none;
+    float: left;
 }
 
 #header {
-    padding-left: 25px;
+    padding-left: 30px;
     background-color: teal;
     position: fixed;
     top: 0;
     height: 80px;
     width: 100%;
-    z-index: 100;
     display: inline-block;
 }
 
@@ -40,4 +40,22 @@ body {
     color: white;
     text-align: left;
     display: inline-block;
+}
+
+.header-link-left {
+    width: fit-content;
+    height: fit-content;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    float: left;
+    margin-left: 75px;
+}
+
+.header-link-right {
+    width: fit-content;
+    height: fit-content;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    float: right;
+    margin-right: 90px;
 }
