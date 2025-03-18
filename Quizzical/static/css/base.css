@@ -26,16 +26,17 @@ body {
     background-color: teal;
     position: fixed;
     top: 0;
-    height: 12vh;
+    height: 80px;
     width: 100%;
     display: inline-block;
     overflow: auto;
+    z-index: 100;
 }
 
 #main {
     width: 100%;
     min-height: 88vh;
-    margin-top: 12vh;
+    margin-top: 80px;
     margin-bottom: 0;
     background-color: beige;
     display: inline-block;
