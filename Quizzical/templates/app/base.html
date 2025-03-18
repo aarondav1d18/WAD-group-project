@@ -15,8 +15,8 @@
             <div class="header-link-left"><h2><a class="header-text" href="{% url 'app:category' %}">Categories</a></h2></div>
             <div class="header-link-left"><h2><a class="header-text" href="{% url 'app:create_quiz' %}">Create Quiz</a></h2></div>
 
-            <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:login' %}">Login</a></h2></div>
             <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:signup' %}">Signup</a></h2></div>
+            <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:login' %}">Login</a></h2></div>
         </div>
         <div id="main">
             {% block body_block %}
