@@ -35,7 +35,7 @@ body {
 
 #main {
     width: 100%;
-    min-height: 88vh;
+    min-height: 92vh;
     margin-top: 80px;
     margin-bottom: 0;
     background-color: beige;
@@ -50,6 +50,7 @@ body {
     color: white;
     text-align: left;
     display: inline-block;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Lucida Sans", "Noto Sans", sans-serif;
 }
 
 .header-link-left {
@@ -68,4 +69,28 @@ body {
     margin-bottom: 10px;
     float: right;
     margin-right: 90px;
+}
+
+#about {
+    float: left;
+    width: 49vw;
+    margin-left: 25px;
+}
+
+#about-body {
+    font-size: 18px;
+}
+
+#contact {
+    float: left;
+    width: 45vw;
+}
+
+#contact-body {
+    font-size: 25px;
+    list-style: none;
+}
+
+.contact-info {
+    margin-top: 10px;
 }
