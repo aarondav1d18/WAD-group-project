@@ -6,6 +6,14 @@ from django.core.exceptions import PermissionDenied, ValidationError
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     email = models.EmailField(unique=True) # Ensure only unique email addresses
+    # The quizes could be [id,id,id,id]
+    saved_quizes = models.TextField(max_length=256) # Pass string of ids into this feild to store data
+
+    def convert_saved_quizes(self, quizes: list) -> str:
+        return str(quizes).strip("[]")
+
+    def get_list_of_saved_quizes(self, quizes: str) -> list:
+        quiz_list = quizes.split(',')
 
     def __str__(self):
         return self.user.username
