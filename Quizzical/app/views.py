@@ -42,7 +42,7 @@ def category(request):
             
             quiz_list.append({
                 "title": quiz.name,
-                "image": "/static/images/default.jpg",  # update if quiz images become available
+                "image": quiz.image,
                 "rating": avg_rating,
                 "category": category_name,
                 "creation_date": quiz.creation_date.isoformat()

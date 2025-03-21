@@ -52,6 +52,7 @@
 
   <!-- Inject quiz data (passed via Django context) -->
   <script>
+    const staticImagePath = "{% static 'images/' %}";
     const quizzes = JSON.parse('{{ quizzes|safe }}'); 
   </script>
   <script src="{% static 'javascript/category.js' %}"></script>
