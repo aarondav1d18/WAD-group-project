@@ -2,7 +2,7 @@
 function openPopup(quiz) {
     const popup = document.getElementById("quiz-popup");
     document.getElementById("quiz-title").innerText = quiz.title;
-    document.getElementById("quiz-image").src = quiz.image;
+    document.getElementById("quiz-image").src = staticImagePath + quiz.image;
     popup.classList.add("show"); // Show with animation
 }
 
@@ -37,7 +37,7 @@ function loadQuizzes(category, containerId) {
         quizCard.classList.add("quiz-card");
 
         quizCard.innerHTML = `
-            <img src="${quiz.image}" alt="${quiz.title}" style="width: 100%; height: auto; border-radius: 5px;">
+            <img src="${staticImagePath}${quiz.image}" alt="${quiz.title}" style="width: 100%; height: auto; border-radius: 5px;">
             <p style="color: white; font-weight: bold;">${quiz.title}</p>
             <div class="star-rating">${generateStars(quiz.rating)}</div>
         `;
