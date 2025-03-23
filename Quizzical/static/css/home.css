@@ -4,11 +4,9 @@ body {
     margin: 0;
     padding: 20px;
     display: flex;
-    justify-content: center;
     align-items: center;
     height: 100vh;
-    /*This colour for now to test the glassy elements*/
-    background: rgba(0, 0, 0, 0.822);
+    flex-direction: column; /* So filters and container stack vertically */
     color: white;
 }
 
@@ -16,6 +14,7 @@ body {
 .container {
     display: flex;
     gap: 20px;
+    margin: 0 auto;
     width: 90%;
     max-width: 1200px;
     align-items: center;

@@ -10,7 +10,7 @@ body {
     background-color: teal;
     display: flex;
     flex-direction: column;
-    min-height: 200vh;
+    min-height: auto;
 }
 
 .header-text {
@@ -51,7 +51,7 @@ body {
 #footer {
     clear: both;
     width: 100%;
-    min-height: 20vh;
+    min-height: auto;
     padding: 0 0 0 0;
     background-color: teal;
     color: white;
