@@ -1,0 +1,97 @@
+html {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+body {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    background-color: teal;
+}
+
+.header-text {
+    color: white;
+    text-decoration: none;
+    float: left;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Lucida Sans", "Noto Sans", sans-serif;
+    margin: -1px 0 0 0;
+}
+
+#site-title {
+    font-size: 40px;
+    margin-top: -7px;
+}
+
+#header {
+    padding-left: 35px;
+    background-color: teal;
+    position: fixed;
+    top: 0;
+    height: 80px;
+    width: 100%;
+    display: inline-block;
+    overflow: auto;
+    z-index: 100;
+}
+
+#main {
+    width: 100%;
+    min-height: 92vh;
+    margin-top: 80px;
+    margin-bottom: 0;
+    background-color: beige;
+    display: inline-block;
+}
+
+#footer {
+    width: 100%;
+    min-height: 20vh;
+    padding: 0 0 0 0;
+    background-color: teal;
+    color: white;
+    text-align: left;
+    display: inline-block;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Lucida Sans", "Noto Sans", sans-serif;
+}
+
+.header-link-left {
+    width: fit-content;
+    height: fit-content;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    float: left;
+    margin-left: 75px;
+}
+
+.header-link-right {
+    width: fit-content;
+    height: fit-content;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    float: right;
+    margin-right: 90px;
+}
+
+#about {
+    float: left;
+    width: 49vw;
+    margin-left: 25px;
+}
+
+#about-body {
+    font-size: 18px;
+}
+
+#contact {
+    float: left;
+    width: 45vw;
+}
+
+#contact-body {
+    font-size: 25px;
+    list-style: none;
+}
+
+.contact-info {
+    margin-top: 10px;
+}
