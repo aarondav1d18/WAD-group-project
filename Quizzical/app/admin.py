@@ -42,7 +42,3 @@ class SlideAdmin(admin.ModelAdmin):
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ('text', 'is_correct', 'slide')
     search_fields = ('text',)
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
