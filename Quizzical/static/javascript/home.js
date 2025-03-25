@@ -1,9 +1,45 @@
 // Open popup function with smooth animation
 function openPopup(quiz) {
-    const popup = document.getElementById("quiz-popup");
-    document.getElementById("quiz-title").innerText = quiz.title;
-    document.getElementById("quiz-image").src = staticImagePath + quiz.image;
-    popup.classList.add("show"); // Show with animation
+  const popup = document.getElementById("quiz-popup");
+  document.getElementById("quiz-title").innerText = quiz.title;
+  document.getElementById("quiz-image").src = staticImagePath + quiz.image;
+  popup.classList.add("show");
+
+  // START BUTTON logic
+  {
+    const oldStartBtn = document.querySelector(".start-btn");
+    const newStartBtn = oldStartBtn.cloneNode(true);
+    oldStartBtn.parentNode.replaceChild(newStartBtn, oldStartBtn);
+
+    newStartBtn.textContent = "Start Quiz";
+    newStartBtn.addEventListener("click", () => {
+    window.location.href = `/Quizzical/quiz/`;
+    });
+  }
+
+  // SAVE BUTTON logic
+  {
+    const oldSaveBtn = document.querySelector(".save-btn");
+    const newSaveBtn = oldSaveBtn.cloneNode(true);
+    oldSaveBtn.parentNode.replaceChild(newSaveBtn, oldSaveBtn);
+
+    if (authenticated) {
+      newSaveBtn.textContent = "Save Quiz";
+      newSaveBtn.addEventListener("click", () => {
+        saveQuiz(quiz.id);
+      });
+    } else {
+      newSaveBtn.textContent = "Log In to Save Quiz";
+      newSaveBtn.addEventListener("click", () => {
+        window.location.href = "/Quizzical/login/";
+      });
+    }
+  }
+}
+
+function saveQuiz(quizId) {
+    console.log("Saving quiz with ID:", quizId);
+    // TODO: implement an actual save, e.g. via fetch() or AJAX to your Django endpoint
 }
 
 // Close popup function with animation

@@ -15,6 +15,8 @@
   }
 </style>
 
+  
+
 <!-- Filters Section -->
 <div class="filters">
   <input type="text" id="search-input" placeholder="Search quizzes...">
@@ -52,6 +54,16 @@
 </div>
 
 <!-- Inject quiz data (passed via Django context) -->
+<script>authenticated = false;</script>
+{% if user.is_authenticated %}
+  <script>
+    authenticated = true;
+  </script>
+{% else %}
+  <script>
+    authenticated = false;
+  </script>
+{% endif %}
 <script>
   const staticImagePath = "{% static 'images/' %}";
   const quizzes = JSON.parse('{{ quizzes|safe }}'); 

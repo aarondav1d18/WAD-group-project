@@ -39,6 +39,17 @@
   </div>
 </div>
 
+<!-- Check if the user is logged in and set this true or false -->
+<script>authenticated = false;</script>
+{% if user.is_authenticated %}
+  <script>
+    authenticated = true;
+  </script>
+{% else %}
+  <script>
+    authenticated = false;
+  </script>
+{% endif %}
 <script>
   const staticImagePath = "{% static 'images/' %}";
   const quizzes = JSON.parse('{{ quizzes|safe }}');

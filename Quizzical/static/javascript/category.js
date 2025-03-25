@@ -13,14 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderQuizzes();
 });
 
-// Attach event listener to the start button inside the popup (if not already attached)
-// document.querySelectorAll('.start-btn').forEach(button => {
-//   button.addEventListener('click', function(event) {
-//       const quizId = this.getAttribute('data-quiz-id');
-//       window.location.href = `/quiz/${quizId}/`; 
-//   });
-// });
-
 // Function to generate star rating HTML
 function generateStars(rating) {
   let stars = "";
@@ -41,9 +33,45 @@ function openPopup(quiz) {
   const popup = document.getElementById("quiz-popup");
   document.getElementById("quiz-title").innerText = quiz.title;
   document.getElementById("quiz-image").src = staticImagePath + quiz.image;
+
   // Set the quiz id on the start button for redirection
   document.querySelector(".start-btn").setAttribute("data-quiz-id", quiz.id);
+
+  document.querySelector(".start-btn").addEventListener("click", () => {
+    window.location.href = `/Quizzical/quiz/`;
+  });
+
+  // Grab the .save-btn in the popup
+  const oldSaveButton = document.querySelector(".save-btn");
+  // Clone it to remove old event listeners (if the popup opens multiple times)
+  const newSaveButton = oldSaveButton.cloneNode(true);
+  oldSaveButton.parentNode.replaceChild(newSaveButton, oldSaveButton);
+
+  // Decide what happens when the user clicks .save-btn
+  if (authenticated) {
+    // If the user is logged in
+    newSaveButton.textContent = "Save Quiz";
+    newSaveButton.addEventListener("click", () => {
+      // Call a function that saves this quiz, e.g. via AJAX
+      saveQuiz(quiz.id);
+    });
+  } else {
+    // If the user is NOT logged in
+    newSaveButton.textContent = "Log In to Save Quiz";
+    newSaveButton.addEventListener("click", () => {
+      // Redirect user to login page
+      window.location.href = "/Quizzical/login/";
+    });
+  }
+
+  // Finally, show the popup
   popup.classList.add("show");
+}
+
+// Simple example of a saveQuiz function
+function saveQuiz(quizId) {
+  console.log("Saving quiz with ID:", quizId);
+  // TODO: implement an actual save, e.g. via fetch() or AJAX to your Django endpoint
 }
 
 // Render quizzes based on search, category, and sort filters
@@ -74,7 +102,6 @@ function renderQuizzes() {
   filteredQuizzes.forEach(quiz => {
     let quizCard = document.createElement("div");
     quizCard.classList.add("quiz-card");
-    console.log(staticImagePath + quiz.image)
     quizCard.innerHTML = `
       <img src="${staticImagePath}${quiz.image}" alt="${quiz.title}" style="width: 100%; height: auto; border-radius: 5px;">
       <p style="color: white; font-weight: bold;">${quiz.title}</p>
