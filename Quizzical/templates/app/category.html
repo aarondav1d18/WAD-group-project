@@ -54,6 +54,7 @@
 </div>
 
 <!-- Inject quiz data (passed via Django context) -->
+<!-- Check if the user is logged in and set this true or false -->
 <script>authenticated = false;</script>
 {% if user.is_authenticated %}
   <script>

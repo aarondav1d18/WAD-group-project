@@ -71,7 +71,7 @@ class StarRating(models.Model):
 
 class Slide(models.Model):
     question = models.CharField(max_length=256)
-    image = models.ImageField(upload_to="slides/images/", blank=True, null=True)
+    image = models.ImageField(upload_to="media/", blank=True, null=True)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="slides")
 
 
