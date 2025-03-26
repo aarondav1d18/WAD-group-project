@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 import json
 from app import models
@@ -6,6 +7,9 @@ import json
 from django.shortcuts import render
 
 from app import models
+from app.models import Quiz, Slide, Answer
+
+
 # Create your views here.
 def home(request):
     context_dict = {"educational": [], "fun": []}
@@ -88,6 +92,13 @@ def category(request):
     return render(request, "app/category.html", context)
 
 
-def quiz(request):
-    context = {'boldmessage': 'quiz'}
-    return render(request, 'app/base.html', context)
+def quiz(request, title):
+    context = {}
+
+    context['quiz'] = Quiz.objects.get(name=title)
+    slides = Slide.objects.filter(quiz=context['quiz']).order_by("?")
+    questions = [(slide, Answer.objects.filter(slide=slide).order_by("?")) for slide in slides]
+
+    context['questions'] = questions
+
+    return render(request, 'app/quiz.html', context)

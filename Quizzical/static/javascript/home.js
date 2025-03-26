@@ -13,7 +13,7 @@ function openPopup(quiz) {
 
     newStartBtn.textContent = "Start Quiz";
     newStartBtn.addEventListener("click", () => {
-    window.location.href = `/Quizzical/quiz/`;
+    window.location.href = `/Quizzical/quiz/${quiz.title}`;
     });
   }
 

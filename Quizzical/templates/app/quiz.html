@@ -1,0 +1,35 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block title_block %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+{% endblock %}
+
+{% block body_block %}
+
+    <h1>{{ quiz.name }}</h1>
+    {% for slide,answers in questions %}
+        <h2>{{ slide.question }}</h2>
+        {% for answer in answers %}
+            <h3>{{ answer.text }}</h3>
+        {% endfor %}
+    {% endfor %}
+
+    <script>authenticated = false;</script>
+    {% if user.is_authenticated %}
+        <script>
+            authenticated = true;
+        </script>
+    {% else %}
+        <script>
+            authenticated = false;
+        </script>
+    {% endif %}
+    <script>
+        const staticImagePath = "{% static 'images/' %}";
+    </script>
+    <script src="{% static 'javascript/quiz.js' %}"></script>
+{% endblock %}
