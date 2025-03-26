@@ -30,4 +30,7 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         file: ./Quizzical/coverage.xml
-        fail_ci_if_error: true 
+        # fail_ci_if_error: true  -> When set to true, the entire workflow will fail if coverage upload fails
+        # fail_ci_if_error: false -> When set to false, the workflow will continue even if coverage upload fails
+        # Set to false to prevent rate limiting issues from failing the entire test suite
+        fail_ci_if_error: false 
