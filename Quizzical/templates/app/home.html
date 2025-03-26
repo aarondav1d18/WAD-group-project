@@ -4,39 +4,25 @@
 {% block title_block %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Quizzes</title>
-  <link rel="stylesheet" href="{% static 'css/category.css' %}">
+  <title>Quizzes</title>
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
 {% block body_block %}
 <style>
-  body {
-    background-image: url('{% static "images/background2.jpg" %}');
-  }
-</style>
+    body {
+      background-image: url('{% static "images/background2.jpg" %}');
+    }
+  </style>
 
-  
-
-<!-- Filters Section -->
-<div class="filters">
-  <input type="text" id="search-input" placeholder="Search quizzes...">
-  <select id="category-filter">
-    <option value="all">All Categories</option>
-    <!-- Options populated dynamically -->
-  </select>
-  <select id="sort-filter">
-    <option value="top">Top Rated</option>
-    <option value="newest">Newest</option>
-  </select>
-</div>
-
-<!-- Main container for quizzes -->
 <div class="container">
   <div class="quiz-section">
-    <h2 id="quizzes-heading">All Quizzes</h2>
-    <div class="quiz-container" id="quiz-container">
-      <!-- Quiz cards will be loaded here dynamically -->
-    </div>
+    <h2>Top Rated Educational Quizzes</h2>
+    <div class="quiz-container" id="educational-quizzes"></div>
+  </div>
+  <div class="quiz-section">
+    <h2>Top Rated Fun Quizzes</h2>
+    <div class="quiz-container" id="fun-quizzes"></div>
   </div>
 </div>
 
@@ -53,7 +39,6 @@
   </div>
 </div>
 
-<!-- Inject quiz data (passed via Django context) -->
 <!-- Check if the user is logged in and set this true or false -->
 <script>authenticated = false;</script>
 {% if user.is_authenticated %}
@@ -67,7 +52,7 @@
 {% endif %}
 <script>
   const staticImagePath = "{% static 'images/' %}";
-  const quizzes = JSON.parse('{{ quizzes|safe }}'); 
+  const quizzes = JSON.parse('{{ quizzes|safe }}');
 </script>
-<script src="{% static 'javascript/category.js' %}"></script>
+<script src="{% static 'javascript/home.js' %}"></script>
 {% endblock %}
