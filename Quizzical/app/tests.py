@@ -142,8 +142,46 @@ class TestViews(TestCase):
         )
 
     def test_home_view(self):
-        response = self.client.get('/')
+        response = self.client.get(reverse('app:home'))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertEqual(response.context['boldmessage'], 'home')
+
+    def test_login_view(self):
+        response = self.client.get(reverse('app:login'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertEqual(response.context['boldmessage'], 'login')
+
+    def test_signup_view(self):
+        response = self.client.get(reverse('app:signup'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertEqual(response.context['boldmessage'], 'signup')
+
+    def test_account_view(self):
+        response = self.client.get(reverse('app:account'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertEqual(response.context['boldmessage'], 'account')
+
+    def test_create_quiz_view(self):
+        response = self.client.get(reverse('app:create_quiz'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertEqual(response.context['boldmessage'], 'create_quiz')
+
+    def test_category_view(self):
+        response = self.client.get(reverse('app:category'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertEqual(response.context['boldmessage'], 'category')
+
+    def test_quiz_view(self):
+        response = self.client.get(reverse('app:quiz'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertEqual(response.context['boldmessage'], 'quiz')
 
 # Structure Tests
 class TestProjectStructure(TestCase):
