@@ -1,0 +1,92 @@
+form {
+    font-family: Arial, sans-serif;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.2), 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    padding: 20px;
+}
+
+form h1 {
+    margin-top: 0px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+form p {
+    font-size: 14px;
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgb(230, 230, 230);
+    text-align: center;
+}
+
+form p a {
+    color: rgb(0, 189, 189);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+form p a:hover {
+    text-decoration: underline;
+}
+
+.form-entry {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.form-entry label {
+    display: block;
+    padding-bottom: 5px;
+}
+
+.form-entry input {
+    width: calc(100% - 15px);
+    padding: 6px;
+    font-size: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(130, 130, 130, 0.2);
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-entry input::placeholder {
+    color: rgba(234, 234, 234, 0.7);
+    font-style: italic;
+}
+
+.form-entry input:focus {
+    border-color: teal;
+    background: rgba(154, 154, 154, 0.2);
+}
+
+#submit {
+    display: block;
+    width: 100px;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    background: teal;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    position: relative;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#submit:hover {
+    background: rgb(0, 152, 152);
+}
