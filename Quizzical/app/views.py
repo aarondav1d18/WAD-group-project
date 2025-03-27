@@ -43,7 +43,7 @@ def home(request):
 
 def login(request):
     context = {'boldmessage': 'login'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/login.html', context)
 
 def signup(request):
     context = {'boldmessage': 'signup'}
