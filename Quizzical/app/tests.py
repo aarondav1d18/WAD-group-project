@@ -147,6 +147,7 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, 'app/base.html')
         self.assertIn('educational', response.context)
         self.assertIn('fun', response.context)
+        self.assertIn('quizzes', response.context)
 
     def test_login_view(self):
         # Test GET request

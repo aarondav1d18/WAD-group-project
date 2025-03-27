@@ -38,7 +38,12 @@ def home(request):
     except Exception as e:
         print(f"Error loading quizzes: {e}")
 
-    return render(request, "app/home.html", {"quizzes": json.dumps(context_dict)})
+    # Include both the raw lists and the JSON version
+    return render(request, "app/home.html", {
+        "educational": context_dict["educational"],
+        "fun": context_dict["fun"],
+        "quizzes": json.dumps(context_dict)
+    })
 
 def user_login(request):
     if request.method == 'POST':
