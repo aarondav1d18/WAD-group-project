@@ -26,19 +26,19 @@ function openPopup(quiz) {
     if (authenticated) {
       const isSaved = quiz.saved_by_user;
     
-      newSaveButton.textContent = isSaved ? "Unsave Quiz" : "Save Quiz";
+      newSaveBtn.textContent = isSaved ? "Unsave Quiz" : "Save Quiz";
     
-      newSaveButton.addEventListener("click", () => {
+      newSaveBtn.addEventListener("click", () => {
         toggleSaveQuiz(quiz.id, (updatedStatus) => {
           quiz.saved_by_user = updatedStatus === "saved";
-          newSaveButton.textContent = quiz.saved_by_user ? "Unsave Quiz" : "Save Quiz";
+          newSaveBtn.textContent = quiz.saved_by_user ? "Unsave Quiz" : "Save Quiz";
           document.getElementById("quiz-popup").classList.remove("show");
         });
       });
     } else {
       // If the user is NOT logged in
-      newSaveButton.textContent = "Log In to Save Quiz";
-      newSaveButton.addEventListener("click", () => {
+      newSaveBtn.textContent = "Log In to Save Quiz";
+      newSaveBtn.addEventListener("click", () => {
         // Redirect user to login page
         window.location.href = "/Quizzical/login/";
       });
