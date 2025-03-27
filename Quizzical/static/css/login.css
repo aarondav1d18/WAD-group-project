@@ -1,0 +1,70 @@
+/* login.css */
+
+/* Basic reset and font styling */
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif; /* or whatever you used in your quiz page */
+    margin: 0;
+    padding: 0;
+    /* The background image is already set in your template inline styles. */
+  }
+  
+  /* Center the container and give it a “card” style */
+  .login-container {
+    max-width: 400px;
+    margin: 100px auto;         /* Push the card down from the top */
+    background: rgba(255, 255, 255, 0.15); /* Slightly transparent white */
+    backdrop-filter: blur(8px); /* Frosted glass effect (Safari + modern browsers) */
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  /* Heading style, similar to “Top Rated Quizzes” look */
+  .login-container h1 {
+    margin-bottom: 1.5rem;
+    color: #ffffff; /* If your background is dark or has a gradient, white text pops */
+    font-weight: 600;
+  }
+  
+  /* Label and input styling to match the card feel */
+  .login-container label {
+    display: block;
+    text-align: left;
+    color: #ffffff;
+    margin: 1rem 0 0.4rem;
+    font-size: 0.95rem;
+  }
+  
+  .login-container input[type="text"],
+  .login-container input[type="password"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  /* Button styled similarly to the quiz cards' call-to-action or rating color */
+  .login-container input[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    background: #ffc107; /* Example color: bright gold/orange like the stars */
+    color: #333;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .login-container input[type="submit"]:hover {
+    background: #ff9800; /* Slightly darker on hover */
+  }
+  

@@ -9,19 +9,30 @@
 {% endblock %}
 
 {% block body_block %}
+<!-- We already have a background image in your base or inline style, 
+     so just ensure it's set to cover, centered, etc. -->
 <style>
-    body {
-      background-image: url('{% static "images/background2.jpg" %}');
-    }
-  </style>
+  body {
+    background-image: url('{% static "images/background2.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+  }
+</style>
 
-<h1>Login to Quizzical</h1>
-<form id="login_form" method="post" action="{% url 'app:login' %}">
+<div class="login-container">
+  <h1>Login to Quizzical</h1>
+  
+  <form id="login_form" method="post" action="{% url 'app:login' %}">
     {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
-    <br />
-    Password: <input type="password" name="password" value="" size="50" />
-    <br />
-<input type="submit" value="submit" />
-</form>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" />
+    
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" />
+    
+    <input type="submit" value="Submit" />
+  </form>
+</div>
 {% endblock %}
