@@ -24,13 +24,22 @@ function openPopup(quiz) {
     oldSaveBtn.parentNode.replaceChild(newSaveBtn, oldSaveBtn);
 
     if (authenticated) {
-      newSaveBtn.textContent = "Save Quiz";
-      newSaveBtn.addEventListener("click", () => {
-        saveQuiz(quiz.id);
+      const isSaved = quiz.saved_by_user;
+    
+      newSaveButton.textContent = isSaved ? "Unsave Quiz" : "Save Quiz";
+    
+      newSaveButton.addEventListener("click", () => {
+        toggleSaveQuiz(quiz.id, (updatedStatus) => {
+          quiz.saved_by_user = updatedStatus === "saved";
+          newSaveButton.textContent = quiz.saved_by_user ? "Unsave Quiz" : "Save Quiz";
+          document.getElementById("quiz-popup").classList.remove("show");
+        });
       });
     } else {
-      newSaveBtn.textContent = "Log In to Save Quiz";
-      newSaveBtn.addEventListener("click", () => {
+      // If the user is NOT logged in
+      newSaveButton.textContent = "Log In to Save Quiz";
+      newSaveButton.addEventListener("click", () => {
+        // Redirect user to login page
         window.location.href = "/Quizzical/login/";
       });
     }
@@ -59,7 +68,26 @@ function saveQuiz(quizId) {
   });
 }
 
-
+function toggleSaveQuiz(quizId, callback) {
+  fetch('/Quizzical/save-quiz/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          callback(data.action); // "saved" or "unsaved"
+      } else {
+          alert("Error: " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error toggling quiz save:', error);
+  });
+}
 
 
 
