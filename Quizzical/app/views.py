@@ -1,33 +1,55 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from app import models
 
 # Create your views here.
 def home(request):
-    ## Using empty context for now and base.html just to set up
-    ## the views and urls
-    context = {'boldmessage': 'home'}
+    context = {
+        'educational': [],
+        'fun': []
+    }
+    try:
+        quizzes = models.Quiz.objects.all()
+        for quiz in quizzes:
+            if quiz.category and quiz.category.is_fun:
+                context['fun'].append(quiz)
+            else:
+                context['educational'].append(quiz)
+    except Exception as e:
+        print(f"Error loading quizzes: {e}")
     return render(request, 'app/base.html', context)
 
 def login(request):
-    context = {'boldmessage': 'login'}
-    return render(request, 'app/base.html', context)
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user and user.is_active:
+            auth_login(request, user)
+            return redirect(reverse('app:home'))
+    return render(request, 'app/base.html')
 
 def signup(request):
-    context = {'boldmessage': 'signup'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')
 
+@login_required
 def account(request):
-    ## Gonna leave the account urls up to whoever does it
-    context = {'boldmessage': 'account'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')
 
+@login_required
 def create_quiz(request):
-    context = {'boldmessage': 'create_quiz'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')
 
 def category(request):
-    context = {'boldmessage': 'category'}
+    context = {'quizzes': []}
+    try:
+        quizzes = models.Quiz.objects.all()
+        context['quizzes'] = quizzes
+    except Exception as e:
+        print(f"Error loading quizzes: {e}")
     return render(request, 'app/base.html', context)
 
 def quiz(request):
-    context = {'boldmessage': 'quiz'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')

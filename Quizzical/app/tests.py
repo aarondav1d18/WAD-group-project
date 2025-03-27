@@ -145,43 +145,59 @@ class TestViews(TestCase):
         response = self.client.get(reverse('app:home'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
-        self.assertEqual(response.context['boldmessage'], 'home')
+        self.assertIn('educational', response.context)
+        self.assertIn('fun', response.context)
 
     def test_login_view(self):
+        # Test GET request
         response = self.client.get(reverse('app:login'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
-        self.assertEqual(response.context['boldmessage'], 'login')
+        
+        # Test POST request with valid credentials
+        response = self.client.post(reverse('app:login'), {
+            'username': 'testuser',
+            'password': 'testpass123'
+        })
+        self.assertRedirects(response, reverse('app:home'))
 
     def test_signup_view(self):
         response = self.client.get(reverse('app:signup'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
-        self.assertEqual(response.context['boldmessage'], 'signup')
 
     def test_account_view(self):
+        # Test without login
+        response = self.client.get(reverse('app:account'))
+        self.assertEqual(response.status_code, 302)  # Should redirect to login
+        
+        # Test with login
+        self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('app:account'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
-        self.assertEqual(response.context['boldmessage'], 'account')
 
     def test_create_quiz_view(self):
+        # Test without login
+        response = self.client.get(reverse('app:create_quiz'))
+        self.assertEqual(response.status_code, 302)  # Should redirect to login
+        
+        # Test with login
+        self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('app:create_quiz'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
-        self.assertEqual(response.context['boldmessage'], 'create_quiz')
 
     def test_category_view(self):
         response = self.client.get(reverse('app:category'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
-        self.assertEqual(response.context['boldmessage'], 'category')
+        self.assertIn('quizzes', response.context)
 
     def test_quiz_view(self):
         response = self.client.get(reverse('app:quiz'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
-        self.assertEqual(response.context['boldmessage'], 'quiz')
 
 # Structure Tests
 class TestProjectStructure(TestCase):
