@@ -48,8 +48,8 @@ class Quiz(models.Model):
     created_by = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="quizzes"
     )
-    # NEW: Image field to store the base image filename (located in static/images/)
-    image = models.CharField(max_length=255, default='default_quiz.jpg')
+    # Image field to store the full path to the image (can be either static or media path)
+    image = models.CharField(max_length=255, default='/static/images/default_quiz.jpg')
 
     def __str__(self):
         return self.name
