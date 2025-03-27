@@ -14,9 +14,13 @@
             <div class="header-link-left"><h2><a class="header-text" href="{% url 'app:home' %}">Home</a></h2></div>
             <div class="header-link-left"><h2><a class="header-text" href="{% url 'app:category' %}">Categories</a></h2></div>
             <div class="header-link-left"><h2><a class="header-text" href="{% url 'app:create_quiz' %}">Create Quiz</a></h2></div>
-
-            <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:signup' %}">Signup</a></h2></div>
-            <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:login' %}">Login</a></h2></div>
+            {% if user.is_authenticated %}
+                <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:logout' %}">Logout</a></h2></div>
+                <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:account' %}">Account</a></h2></div>
+            {% else %}
+                <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:signup' %}">Signup</a></h2></div>
+                <div class="header-link-right"><h2><a class="header-text" href="{% url 'app:login' %}">Login</a></h2></div>
+            {% endif %}
         </div>
         <div id="main">
             {% block body_block %}
@@ -24,8 +28,13 @@
                     <li><a href="{% url 'app:home' %}">home</a></li>
                     <li><a href="{% url 'app:create_quiz' %}">create_quiz</a></li>
                     <li><a href="{% url 'app:account' %}">account</a></li>
-                    <li><a href="{% url 'app:signup' %}">signup</a></li>
-                    <li><a href="{% url 'app:login' %}">login</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'app:account' %}">Account</a></li>
+                        <li><a href="{% url 'app:home' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'app:signup' %}">signup</a></li>
+                        <li><a href="{% url 'app:login' %}">login</a></li>
+                    {% endif %}
                     <li><a href="{% url 'app:category' %}">category</a></li>
                     <li><a href="{% url 'app:quiz' %}">quiz</a></li>
                 </ul>
