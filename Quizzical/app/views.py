@@ -4,6 +4,12 @@ from app import models
 # Create your views here.
 import json
 from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.urls import reverse
+from django.shortcuts import redirect
+from django.http import HttpResponse
 
 from app import models
 # Create your views here.
@@ -41,13 +47,35 @@ def home(request):
 
     return render(request, "app/home.html", {"quizzes": json.dumps(context_dict)})
 
-def login(request):
-    context = {'boldmessage': 'login'}
-    return render(request, 'app/base.html', context)
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        user = authenticate(username=username, password=password)
+        
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('app:home'))
+            else:
+                return HttpResponse("Your account is disabled.")
+        else:
+            print(f"Invalid login details: {username}, {password}")
+            return HttpResponse("Invalid login details supplied.")
+    else:
+        return render(request, 'app/login.html')
 
 def signup(request):
     context = {'boldmessage': 'signup'}
     return render(request, 'app/base.html', context)
+
+@login_required
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+    # Take the user back to the homepage.
+    return redirect(reverse('app:home'))
 
 def account(request):
     ## Gonna leave the account urls up to whoever does it
