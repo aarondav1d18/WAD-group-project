@@ -68,10 +68,26 @@ function openPopup(quiz) {
   popup.classList.add("show");
 }
 
-// Simple example of a saveQuiz function
 function saveQuiz(quizId) {
-  console.log("Saving quiz with ID:", quizId);
-  // TODO: implement an actual save, e.g. via fetch() or AJAX to your Django endpoint
+  fetch('/Quizzical/save-quiz/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+  })
+  .then(response => response.json())
+  .then(data => {
+      document.getElementById("quiz-popup").classList.remove("show");
+      if (data.success) {
+          alert("Quiz saved!");
+      } else {
+          alert("Failed to save quiz: " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error saving quiz:', error);
+  });
 }
 
 // Render quizzes based on search, category, and sort filters
