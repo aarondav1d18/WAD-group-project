@@ -32,7 +32,7 @@ function generateStars(rating) {
 function openPopup(quiz) {
   const popup = document.getElementById("quiz-popup");
   document.getElementById("quiz-title").innerText = quiz.title;
-  document.getElementById("quiz-image").src = staticImagePath + quiz.image;
+  document.getElementById("quiz-image").src = quiz.image;
 
   // Set the quiz id on the start button for redirection
   document.querySelector(".start-btn").setAttribute("data-quiz-id", quiz.id);
@@ -158,7 +158,7 @@ function renderQuizzes() {
     let quizCard = document.createElement("div");
     quizCard.classList.add("quiz-card");
     quizCard.innerHTML = `
-      <img src="${staticImagePath}${quiz.image}" alt="${quiz.title}" style="width: 100%; height: auto; border-radius: 5px;">
+      <img src="${quiz.image}" alt="${quiz.title}" style="width: 100%; height: auto; border-radius: 5px;">
       <p style="color: white; font-weight: bold;">${quiz.title}</p>
       <div class="star-rating">${generateStars(quiz.rating)}</div>
     `;
