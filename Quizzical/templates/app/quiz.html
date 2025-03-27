@@ -6,30 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
     <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+    <style>
+        body {
+          background-image: url('{% static "images/background2.jpg" %}');
+        }
+    </style>
 {% endblock %}
 
 {% block body_block %}
+    <div>
+        <h1 id="quiz-title">{{ quiz.name }}</h1>
+    </div>
 
-    <h1>{{ quiz.name }}</h1>
-    {% for slide,answers in questions %}
-        <h2>{{ slide.question }}</h2>
-        {% for answer in answers %}
-            <h3>{{ answer.text }}</h3>
-        {% endfor %}
-    {% endfor %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <ul id="answer-list">
+                    <li>
+                        <input type="radio" name="answer" id="0" value="0">
+                        <label class="answer-text" for="0"></label>
+                    </li>
+                    <li>
+                        <input type="radio" name="answer" id="1" value="1">
+                        <label class="answer-text" for="1"></label>
+                    </li>
+                    <li>
+                        <input type="radio" name="answer" id="2" value="2">
+                        <label class="answer-text" for="2"></label>
+                    </li>
+                    <li>
+                        <input type="radio" name="answer" id="3" value="3">
+                        <label class="answer-text" for="3"></label>
+                    </li>
+                </ul>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 
-    <script>authenticated = false;</script>
-    {% if user.is_authenticated %}
-        <script>
-            authenticated = true;
-        </script>
-    {% else %}
-        <script>
-            authenticated = false;
-        </script>
-    {% endif %}
-    <script>
-        const staticImagePath = "{% static 'images/' %}";
-    </script>
     <script src="{% static 'javascript/quiz.js' %}"></script>
+
+    <script>
+        const quiz = JSON.parse('{{ quiz|safe }}');
+    </script>
 {% endblock %}

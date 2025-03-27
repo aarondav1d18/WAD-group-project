@@ -5,6 +5,7 @@ from app import models
 # Create your views here.
 import json
 from django.shortcuts import render
+from django.forms.models import model_to_dict
 
 from app import models
 from app.models import Quiz, Slide, Answer
@@ -95,10 +96,12 @@ def category(request):
 def quiz(request, title):
     context = {}
 
-    context['quiz'] = Quiz.objects.get(name=title)
-    slides = Slide.objects.filter(quiz=context['quiz']).order_by("?")
-    questions = [(slide, Answer.objects.filter(slide=slide).order_by("?")) for slide in slides]
+    quiz = Quiz.objects.get(name=title)
+    slides = Slide.objects.filter(quiz=quiz).order_by("?")
 
-    context['questions'] = questions
+    context['name'] = quiz.name
+    context['quiz_data'] = {}
+    for slide in slides:
+        context['quiz_data'][slide.id] = slide.question
 
-    return render(request, 'app/quiz.html', context)
+    return render(request, 'app/quiz.html', {'quiz': json.dumps(context)})
