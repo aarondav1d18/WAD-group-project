@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+import re
 from app import models
 # Create your views here.
 import json
@@ -8,11 +9,14 @@ from app import models
 from app.models import Quiz, Slide, Answer
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 import json
 from app import models
@@ -137,26 +141,87 @@ def rate_quiz(request):
         return JsonResponse({"success": False, "error": "Invalid method"}, status=405)
 
 def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    errors = {}
+    
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
         
-        user = authenticate(username=username, password=password)
+        try:
+            user_profile = UserProfile.objects.get(email=email)
+            # Use the related User's username for authentication
+            user = authenticate(request, username=user_profile.user.username, password=password)
+        except UserProfile.DoesNotExist:
+            user = None
         
         if user:
             if user.is_active:
                 login(request, user)
-                return redirect(reverse('app:home'))
+                return redirect(reverse("app:home"))
             else:
-                return HttpResponse("Your account is disabled.")
+                errors["email"] = "Your account is disabled."
         else:
-            print(f"Invalid login details: {username}, {password}")
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        return render(request, 'app/login.html')
+            print(f"Invalid login details: {email}, {password}")
+            errors["email"] = "Incorrect email or password."
+    
+    return render(request, "app/login.html", {"errors": errors})
+
 
 def signup(request):
-    return render(request, 'app/base.html')
+    errors = {}
+    
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        password_confirmation = request.POST.get("password_confirmation")
+        email_is_valid = True
+
+        # Ensures that the email is in the name@example.com format
+        try:
+            validate_email(email)
+        except ValidationError:
+            email_is_valid = False
+        
+        # Username validation
+        if len(username) < 3:
+            errors["username"] = "Your username must be at least 3 characters long."
+        elif len(username) > 32:
+            errors["username"] = "Your username must be less than 32 characters long."
+        elif not re.fullmatch(r"^[A-Za-z0-9_]+$", username):
+            errors["username"] = "Your username can only contain letters, numbers, and underscores."
+        elif User.objects.filter(username=username).exists():
+            errors["username"] = "Your username must be unique."
+        
+        # Email validation
+        if UserProfile.objects.filter(email=email).exists():
+            errors["email"] = f"Your email is already registered with an account, try to <a href='{reverse('app:login')}'>log in</a> instead."
+        elif not email_is_valid:
+            errors["email"] = "Your email must be in the <i>name@example.com</i> format."
+        
+        # Password validation
+        elif len(password) < 8:
+            errors["password"] = "Your password must be at least 8 characters long."
+        elif password != password_confirmation:
+            errors["password"] = "Your password does not match with the confirmation."
+        elif password.isupper() or password.islower():
+            errors["password"] = f"Your password must contain at least one {'upper' if password.islower() else 'lower'}case letter."
+        elif not re.search(r"\d", password):
+            errors["password"] = "Your password must contain at least one number."
+        
+        if len(errors) == 0:
+            # Create user profile in the database
+            try:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                UserProfile.objects.create(user=user, email=email)
+
+                # Log in automatically after account creation
+                return user_login(request)
+            except Exception as e:
+                errors["username"] = "There was a problem creating your account, please try again later."
+
+    return render(request, 'app/signup.html', {"errors": errors})
+
 
 @login_required
 def user_logout(request):

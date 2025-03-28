@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    <title>Log in</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}"/>
 
     <style>
@@ -13,10 +13,19 @@
 {% endblock %}
 
 {% block body_block %}
-    <form id="login" method="post" action="{%url 'app:login' %}" enctype="multipart/form-data">
-        <h1>Log in</h1>
+    <form id="register" method="post" action="{% url 'app:signup' %}" enctype="multipart/form-data">
+        <h1>Sign Up</h1>
 
         {% csrf_token %}
+        <div class="form-entry">
+            <label for="username">Username:</label>
+            <input type="text" name="username" type="submit" placeholder="Enter your username"/>
+            
+            {% if errors.username %}
+                <p>{{ errors.username|safe }}</p>
+            {% endif %}
+        </div>
+
         <div class="form-entry">
             <label for="email">Email:</label>
             <input type="email" name="email" type="submit" placeholder="Enter your email"/>
@@ -35,8 +44,13 @@
             {% endif %}
         </div>
 
+        <div class="form-entry">
+            <label for="password_confirmation">Confirm Password:</label>
+            <input type="password" name="password_confirmation" type="submit" placeholder="Confirm your password"/>
+        </div> 
+
         <input id="submit" type="submit" name="submit" value="Done"/>
 
-        <p>Don't have an account? <a href="{% url 'app:signup' %}">Sign up</a> instead.</p>
+        <p>Already have an account? <a href="{% url 'app:login' %}">Log in</a> instead.</p>
     </form>
 {% endblock %}

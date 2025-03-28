@@ -134,7 +134,7 @@ class TestViews(TestCase):
         )
         self.profile = UserProfile.objects.create(
             user=self.user,
-            email="test@example.com"
+            email="testuser@example.com"  # Updated to match login credentials
         )
         self.quiz = Quiz.objects.create(
             name="Test Quiz",
@@ -150,14 +150,15 @@ class TestViews(TestCase):
         self.assertIn('quizzes', response.context)
 
     def test_login_view(self):
-        # Test GET request
+        # Test GET request: use the correct login template
         response = self.client.get(reverse('app:login'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'app/base.html')
+        self.assertTemplateUsed(response, 'app/login.html')
         
         # Test POST request with valid credentials
+        # Use "email" as the key since the view expects an email
         response = self.client.post(reverse('app:login'), {
-            'username': 'testuser',
+            'email': 'testuser@example.com',
             'password': 'testpass123'
         })
         self.assertRedirects(response, reverse('app:home'))
@@ -165,7 +166,9 @@ class TestViews(TestCase):
     def test_signup_view(self):
         response = self.client.get(reverse('app:signup'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'app/base.html')
+        # Check against the signup template
+        self.assertTemplateUsed(response, 'app/signup.html')
+
 
     def test_account_view(self):
         # Test without login
