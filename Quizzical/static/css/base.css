@@ -1,16 +1,44 @@
 html {
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-    height: 120%;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 body {
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
+    margin: 0;
+    padding: 0;
     background-color: teal;
     display: flex;
     flex-direction: column;
-    min-height: auto;
+    min-height: 100vh;
+}
+
+#header {
+    padding-left: 35px;
+    background-color: teal;
+    position: fixed;
+    top: 0;
+    height: 80px;
+    width: 100%;
+    overflow: auto;
+    z-index: 100;
+}
+
+#main {
+    flex: 1;
+    width: 100%;
+    margin-top: 80px; /* push content below the fixed header */
+    /* remove min-height if unnecessary */
+}
+
+#footer {
+    clear: both;
+    width: 100%;
+    padding: 0;
+    background-color: teal;
+    color: white;
+    text-align: left;
+    /* change display if necessary, block is sufficient here */
 }
 
 .header-text {
@@ -24,40 +52,6 @@ body {
 #site-title {
     font-size: 40px;
     margin-top: -7px;
-}
-
-#header {
-    padding-left: 35px;
-    background-color: teal;
-    position: fixed;
-    top: 0;
-    height: 80px;
-    width: 100%;
-    display: inline-block;
-    overflow: auto;
-    z-index: 100;
-}
-
-#main {
-    width: 100%;
-    min-height: 92vh;
-    margin-top: 80px;
-    margin-bottom: 0;
-    /* background-color: beige; */
-    display: inline-block;
-    /* flex: 1; */
-}
-
-#footer {
-    clear: both;
-    width: 100%;
-    min-height: auto;
-    padding: 0 0 0 0;
-    background-color: teal;
-    color: white;
-    text-align: left;
-    display: inline-block;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Lucida Sans", "Noto Sans", sans-serif;
 }
 
 .header-link-left {

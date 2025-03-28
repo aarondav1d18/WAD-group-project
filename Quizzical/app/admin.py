@@ -1,10 +1,20 @@
 from django.contrib import admin
 from .models import UserProfile, Category, Quiz, StarRating, Slide, Answer
+from django.contrib import admin
+from django.contrib.auth.models import User 
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'email', 'saved_quizes')
+    list_display = ('user', 'email', 'saved_quiz_list')
     search_fields = ('user__username', 'email')
+    readonly_fields = ('saved_quiz_list',)
+
+    def saved_quiz_list(self, obj):
+        quizzes = obj.saved_quizes.all()
+        return ", ".join(q.name for q in quizzes)
+
+    saved_quiz_list.short_description = 'Saved Quizzes'
+
 
 
 @admin.register(Category)
