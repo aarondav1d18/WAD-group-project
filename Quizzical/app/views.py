@@ -1,19 +1,14 @@
-from django.shortcuts import render
-import json
-from app import models
-# Create your views here.
-import json
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
 from django.urls import reverse
-from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+import json
 from app import models
+
 # Create your views here.
 def home(request):
     context_dict = {"educational": [], "fun": []}
@@ -51,9 +46,14 @@ def home(request):
                 context_dict["educational"].append(quiz_data)
 
     except Exception as e:
-        print(f"Error loading quizzes: {e}")  # Log error instead of silent failure
+        print(f"Error loading quizzes: {e}")
 
-    return render(request, "app/home.html", {"quizzes": json.dumps(context_dict)})
+    # Include both the raw lists and the JSON version
+    return render(request, "app/home.html", {
+        "educational": context_dict["educational"],
+        "fun": context_dict["fun"],
+        "quizzes": json.dumps(context_dict)
+    })
 
 
 @csrf_exempt
@@ -100,24 +100,20 @@ def user_login(request):
         return render(request, 'app/login.html')
 
 def signup(request):
-    context = {'boldmessage': 'signup'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')
 
 @login_required
 def user_logout(request):
-    # Since we know the user is logged in, we can now just log them out.
     logout(request)
-    # Take the user back to the homepage.
     return redirect(reverse('app:home'))
 
+@login_required
 def account(request):
-    ## Gonna leave the account urls up to whoever does it
-    context = {'boldmessage': 'account'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')
 
+@login_required
 def create_quiz(request):
-    context = {'boldmessage': 'create_quiz'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')
 
 def category(request):
     quiz_list = []
@@ -140,7 +136,6 @@ def category(request):
             
             quiz_list.append({
                 "title": quiz.name,
-                "image": quiz.image,
                 "rating": avg_rating,
                 "category": category_name,
                 "creation_date": quiz.creation_date.isoformat(),
@@ -154,7 +149,5 @@ def category(request):
     context = {"quizzes": json.dumps(quiz_list)}
     return render(request, "app/category.html", context)
 
-
 def quiz(request):
-    context = {'boldmessage': 'quiz'}
-    return render(request, 'app/base.html', context)
+    return render(request, 'app/base.html')
