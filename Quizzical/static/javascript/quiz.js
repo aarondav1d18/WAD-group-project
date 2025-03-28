@@ -59,7 +59,13 @@ function checkAnswer(event) {
 
 function endQuiz(){
     document.getElementById('button-container').innerHTML = "";
-    document.getElementById('question-text').textContent = "You Got " + correct_answers + " Answers Correct!";
+    if (correct_answers === 1){
+        document.getElementById('question-text').textContent = "You Got " + correct_answers + " Answer Correct!";
+    }
+    else {
+        document.getElementById('question-text').textContent = "You Got " + correct_answers + " Answers Correct!";
+    }
+
 
     const againButton = document.createElement("button");
     againButton.textContent = "Try Again";
