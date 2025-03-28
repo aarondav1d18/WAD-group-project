@@ -199,6 +199,7 @@ def category(request):
                 "title": quiz.name,
                 "rating": avg_rating,
                 "user_rating": user_rating,
+                "image": quiz.image,
                 "category": category_name,
                 "creation_date": quiz.creation_date.isoformat(),
                 "id": quiz.id,
