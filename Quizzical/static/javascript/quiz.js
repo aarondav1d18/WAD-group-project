@@ -76,9 +76,20 @@ function endQuiz(){
 
     const saveButton = document.createElement("button");
     if (authenticated){
-        saveButton.textContent = "Save Quiz";
+        const isSaved = quiz.saved_by_user;
+
+        if (isSaved) {
+            saveButton.textContent = "Unsave Quiz";
+        }
+        else {
+            saveButton.textContent = "Save Quiz";
+        }
+
         saveButton.addEventListener("click", () => {
-            saveQuiz(quiz.id);
+            toggleSaveQuiz(quiz.quizID, (updatedStatus) => {
+                quiz.saved_by_user = updatedStatus === "saved";
+                saveButton.textContent = quiz.saved_by_user ? "Unsave Quiz" : "Save Quiz";
+            });
         })
     }
     else {
@@ -96,9 +107,25 @@ function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
-function saveQuiz(quizId) {
-    console.log("Saving quiz with ID:", quizId);
-    // TODO: implement an actual save, e.g. via fetch() or AJAX to your Django endpoint
+function toggleSaveQuiz(quizId, callback) {
+  fetch('/Quizzical/save-quiz/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          callback(data.action); // "saved" or "unsaved"
+      } else {
+          alert("Error: " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error toggling quiz save:', error);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function(){

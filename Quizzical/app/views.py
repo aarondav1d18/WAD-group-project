@@ -351,10 +351,14 @@ def quiz(request, title):
     try:
         quiz = Quiz.objects.get(name=title)
         slides = Slide.objects.filter(quiz=quiz)
+        user_profile = UserProfile.objects.get(user=request.user)
+        saved_ids = list(user_profile.saved_quizes.values_list('id', flat=True))
 
         context['name'] = quiz.name
+        context['quizID'] = quiz.id
         context['questions'] = {}
         context['answers'] = {}
+        context['saved_by_user'] = context['quizID'] in saved_ids
 
         for i in range(0,slides.count()):
             context['questions'][i] = slides[i].question

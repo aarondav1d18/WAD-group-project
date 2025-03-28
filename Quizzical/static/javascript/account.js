@@ -10,7 +10,7 @@ function renderQuizzes(quizzes) {
       <p style="color: white; font-weight: bold;">${quiz.title}</p>
       <div class="star-rating">${generateStars(quiz.rating)}</div>
     `;
-    quizCard.addEventListener("click", () => window.location.href=`/Quizzical/quiz/${quiz.name}/`);
+    quizCard.addEventListener("click", () => window.location.href = `/Quizzical/quiz/${quiz.title}`);
     container.appendChild(quizCard);
   });
 }
