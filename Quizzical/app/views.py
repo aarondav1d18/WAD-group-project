@@ -146,10 +146,12 @@ def user_login(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
-
+        
         try:
-            user = authenticate(request, username=UserProfile.objects.get(email=email), password=password)
-        except:
+            user_profile = UserProfile.objects.get(email=email)
+            # Use the related User's username for authentication
+            user = authenticate(request, username=user_profile.user.username, password=password)
+        except UserProfile.DoesNotExist:
             user = None
         
         if user:
@@ -163,6 +165,7 @@ def user_login(request):
             errors["email"] = "Incorrect email or password."
     
     return render(request, "app/login.html", {"errors": errors})
+
 
 def signup(request):
     errors = {}
@@ -192,7 +195,7 @@ def signup(request):
         
         # Email validation
         if UserProfile.objects.filter(email=email).exists():
-            errors["email"] = f'Your email is already registered with an account, try to <a href="{reverse("app:login")}">log in</a> instead.'
+            errors["email"] = f"Your email is already registered with an account, try to <a href='{reverse('app:login')}'>log in</a> instead."
         elif not email_is_valid:
             errors["email"] = "Your email must be in the <i>name@example.com</i> format."
         
@@ -202,7 +205,7 @@ def signup(request):
         elif password != password_confirmation:
             errors["password"] = "Your password does not match with the confirmation."
         elif password.isupper() or password.islower():
-            errors["password"] = f"Your password must contain at least one {"upper" if password.islower() else "lower"}case letter."
+            errors["password"] = f"Your password must contain at least one {'upper' if password.islower() else 'lower'}case letter."
         elif not re.search(r"\d", password):
             errors["password"] = "Your password must contain at least one number."
         
@@ -212,11 +215,13 @@ def signup(request):
                 user = User.objects.create_user(username=username, email=email, password=password)
                 UserProfile.objects.create(user=user, email=email)
 
-                return user_login(request) # Log in automatically after account creation
-            except:
+                # Log in automatically after account creation
+                return user_login(request)
+            except Exception as e:
                 errors["username"] = "There was a problem creating your account, please try again later."
 
     return render(request, 'app/signup.html', {"errors": errors})
+
 
 @login_required
 def user_logout(request):
