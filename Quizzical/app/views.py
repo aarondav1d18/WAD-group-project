@@ -298,15 +298,15 @@ def create_quiz(request):
     if request.method == "POST":
         quiz_name = request.POST.get("quiz_name")
         description = request.POST.get("description")
-        image = request.POST.get("image")
+        image = request.FILES.get("image")  # Retrieve file from request.FILES
         category_name = request.POST.get("category")
 
         category = Category.objects.get(name=category_name)
         user_profile = UserProfile.objects.get(user=request.user)
+
         quiz = Quiz(
             name=quiz_name,
-            description=description,
-            image=image.url,
+            image=image if image else None,  # Assign file object directly
             category=category,
             created_by=user_profile
         )
@@ -319,7 +319,7 @@ def create_quiz(request):
             
             slide = Slide(
                 question=question,
-                image=slide_image if slide_image else None,
+                image=f'/media/{slide_image}' if slide_image else None,
                 quiz=quiz
             )
             slide.save()
@@ -341,9 +341,11 @@ def create_quiz(request):
 
             slide_number += 1
 
-        return redirect('app/home.html')
+        return redirect(reverse('app:home'))
 
     return render(request, 'app/create_quiz.html', context)
+
+
 
 def category(request):
     quiz_list = []
