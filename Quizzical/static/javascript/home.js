@@ -94,7 +94,7 @@ function submitRating(quizId, ratingValue) {
   .then(response => response.json())
   .then(data => {
     if (data.success) {
-      alert("Rating saved!");
+      // alert("Rating saved!");
       window.location.reload(); // Refresh the page
     } else {
       alert("Failed to save rating: " + data.error);
