@@ -345,11 +345,7 @@ def create_quiz(request):
 
             slide_number += 1
 
-<<<<<<< HEAD
         return redirect(reverse('app:home'))
-=======
-        return render(request, 'app/create_quiz.html', context)
->>>>>>> origin/create-quiz-page
 
     return render(request, 'app/create_quiz.html', context)
 
