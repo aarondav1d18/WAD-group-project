@@ -7,7 +7,8 @@ class UserProfile(models.Model):
     email = models.EmailField(unique=True)
     saved_quizes = models.ManyToManyField("Quiz", blank=True, related_name="saved_by_users")
 
-
+    def __str__(self):
+        return self.user.username
 
 
 class Category(models.Model):
