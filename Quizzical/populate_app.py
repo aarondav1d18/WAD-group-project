@@ -26,12 +26,19 @@ def populate():
     system_user.set_password('password')
     system_user.save()
 
+    # Create an additional user: 'test' with password 'test'
+    test_user, _ = User.objects.get_or_create(username='test', defaults={'email': 'test@example.com'})
+    test_user.set_password('test')
+    test_user.save()
+
+    # Create or get UserProfile for 'test'
+    UserProfile.objects.get_or_create(user=test_user, defaults={'email': test_user.email})
+
     # 2. Create or get a matching UserProfile
     system_profile, created_profile = UserProfile.objects.get_or_create(
         user=system_user,
         defaults={
             'email': system_user.email,
-            'saved_quizes': '',
         }
     )
 

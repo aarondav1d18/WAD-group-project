@@ -24,13 +24,21 @@ function openPopup(quiz) {
     oldSaveBtn.parentNode.replaceChild(newSaveBtn, oldSaveBtn);
 
     if (authenticated) {
-      newSaveBtn.textContent = "Save Quiz";
+      const isSaved = quiz.saved_by_user;
+    
+      newSaveBtn.textContent = isSaved ? "Unsave Quiz" : "Save Quiz";
+    
       newSaveBtn.addEventListener("click", () => {
-        saveQuiz(quiz.id);
+        toggleSaveQuiz(quiz.id, (updatedStatus) => {
+          quiz.saved_by_user = updatedStatus === "saved";
+          newSaveBtn.textContent = quiz.saved_by_user ? "Unsave Quiz" : "Save Quiz";
+        });
       });
     } else {
+      // If the user is NOT logged in
       newSaveBtn.textContent = "Log In to Save Quiz";
       newSaveBtn.addEventListener("click", () => {
+        // Redirect user to login page
         window.location.href = "/Quizzical/login/";
       });
     }
@@ -97,9 +105,48 @@ function submitRating(quizId, ratingValue) {
 
 
 function saveQuiz(quizId) {
-    console.log("Saving quiz with ID:", quizId);
-    // TODO: implement an actual save, e.g. via fetch() or AJAX to your Django endpoint
+  fetch('save-quiz/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          alert("Quiz saved!");
+      } else {
+          alert("Failed to save quiz: " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error saving quiz:', error);
+  });
 }
+
+function toggleSaveQuiz(quizId, callback) {
+  fetch('/Quizzical/save-quiz/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          callback(data.action); // "saved" or "unsaved"
+      } else {
+          alert("Error: " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error toggling quiz save:', error);
+  });
+}
+
+
 
 // Close popup function with animation
 document.querySelector(".close-btn").addEventListener("click", () => {
