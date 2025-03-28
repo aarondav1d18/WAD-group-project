@@ -67,11 +67,32 @@ function endQuiz(){
     againButton.addEventListener("click", function(){
         location.reload();
     })
+
+    const saveButton = document.createElement("button");
+    if (authenticated){
+        saveButton.textContent = "Save Quiz";
+        saveButton.addEventListener("click", () => {
+            saveQuiz(quiz.id);
+        })
+    }
+    else {
+        saveButton.textContent = "Log In to Save Quiz";
+        saveButton.addEventListener("click", () => {
+            window.location.href = "/Quizzical/login/";
+        })
+    }
+    saveButton.classList.add("again");
     document.getElementById('button-container').appendChild(againButton);
+    document.getElementById('button-container').appendChild(saveButton);
 }
 
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
+}
+
+function saveQuiz(quizId) {
+    console.log("Saving quiz with ID:", quizId);
+    // TODO: implement an actual save, e.g. via fetch() or AJAX to your Django endpoint
 }
 
 document.addEventListener("DOMContentLoaded", function(){
