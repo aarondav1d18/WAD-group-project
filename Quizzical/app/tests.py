@@ -196,9 +196,10 @@ class TestViews(TestCase):
         self.assertIn('quizzes', response.context)
 
     def test_quiz_view(self):
-        response = self.client.get(reverse('app:quiz'))
+        response = self.client.get(reverse('app:quiz', kwargs={'title': self.quiz.name}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app/base.html')
+
 
 # Structure Tests
 class TestProjectStructure(TestCase):
