@@ -1,0 +1,42 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block title_block %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account</title>
+  <link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock %}
+
+{% block body_block %}
+    <div id="tab">
+        <button class="tab-link" id="user-info">User Information</button>
+        <button class="tab-link" id="fav">Favourite Quizzes</button>
+        <button class="tab-link" id="created">My Quizzes</button>
+    </div>
+
+    <!-- Main container for quizzes -->
+    <div class="container">
+      <div class="quiz-section">
+        <h2 id="quizzes-heading">All Quizzes</h2>
+        <div class="quiz-container" id="quiz-container">
+          <!-- Quiz cards will be loaded here dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <script>authenticated = false;</script>
+    {% if user.is_authenticated %}
+        <script>
+        authenticated = true;
+        </script>
+    {% else %}
+        <script>
+        authenticated = false;
+        </script>
+    {% endif %}
+    <script>
+        const quizzes = JSON.parse('{{ quizzes|safe }}');
+    </script>
+    <script src="{% static 'javascript/account.js' %}"></script>
+{% endblock %}
