@@ -51,6 +51,10 @@
     box-sizing: border-box;
 }
 
+.answer-option:hover {
+    background-color: #6c909a;
+}
+
 #next-btn {
     background: rgba(0, 128, 128, 0.50);
     backdrop-filter: blur(8px);
