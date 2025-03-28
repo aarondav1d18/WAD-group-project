@@ -18,10 +18,9 @@ def home(request):
         saved_ids = list(user_profile.saved_quizes.values_list('id', flat=True))
 
     try:
-        # Fetch quizzes
         quizzes = models.Quiz.objects.all()
 
-        # Compute average ratings
+        # Compute average ratings for display
         quiz_ratings = {}
         for quiz in quizzes:
             ratings = models.StarRating.objects.filter(quiz=quiz)
@@ -31,15 +30,29 @@ def home(request):
         # Order quizzes by rating
         quizzes = sorted(quizzes, key=lambda q: quiz_ratings[q.id], reverse=True)
 
+        # Get current user's ratings if authenticated
+        user_profile = request.user.profile if request.user.is_authenticated else None
+
         # Categorize quizzes
         for quiz in quizzes:
             quiz_data = {
+                "id": quiz.id,
                 "title": quiz.name,
                 "image": quiz.image,  # Since `Quiz` has no `image` field dont know if we are going to add
                 "rating": quiz_ratings[quiz.id],
                 "id": quiz.id,
                 'saved_by_user': quiz.id in saved_ids
             }
+            # Add user's rating if available
+            if user_profile:
+                try:
+                    rating_obj = models.StarRating.objects.get(quiz=quiz, profile=user_profile)
+                    quiz_data["user_rating"] = rating_obj.stars
+                except models.StarRating.DoesNotExist:
+                    quiz_data["user_rating"] = 0
+            else:
+                quiz_data["user_rating"] = 0
+
             if quiz.category and quiz.category.is_fun:
                 context_dict["fun"].append(quiz_data)
             else:
@@ -79,6 +92,39 @@ def toggle_save_quiz(request):
     return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
 
 
+
+
+@csrf_exempt
+def rate_quiz(request):
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return JsonResponse({"success": False, "error": "Not authenticated"}, status=403)
+        try:
+            data = json.loads(request.body)
+
+            # Must match the JSON keys from the JS
+            quiz_id = data.get("quiz_id")
+            rating_value = data.get("rating")
+
+            # Convert rating_value to an integer
+            rating_value = int(rating_value)
+
+            # (If rating_value is None or invalid, the above line will fail)
+            quiz = models.Quiz.objects.get(id=quiz_id)
+            print(rating_value)
+            user_profile = request.user.profile
+            rating_obj, created = models.StarRating.objects.get_or_create(
+                quiz=quiz, profile=user_profile, defaults={"stars": rating_value}
+            )
+            # print(f'rating_obj: {rating_obj}    created: {created}')
+            rating_obj.stars = rating_value
+            rating_obj.save()
+
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
+    else:
+        return JsonResponse({"success": False, "error": "Invalid method"}, status=405)
 
 def user_login(request):
     if request.method == 'POST':
@@ -123,20 +169,36 @@ def category(request):
         saved_ids = list(profile.saved_quizes.values_list('id', flat=True))
     try:
         quizzes = models.Quiz.objects.all()
+        # If the user is authenticated, get their UserProfile for ratings
+        user_profile = request.user.profile if request.user.is_authenticated else None
+
         for quiz in quizzes:
-            # Use the reverse relation to get ratings for this quiz
+            # Calculate average rating using the reverse relation "ratings"
             ratings = quiz.ratings.all()
             if ratings.exists():
                 avg_rating = sum(r.stars for r in ratings) / ratings.count()
             else:
                 avg_rating = 0
 
-            # If no category is associated, display "Miscellaneous"
+            # Get the quiz's category name; if not set, default to "Miscellaneous"
             category_name = quiz.category.name if quiz.category else "Miscellaneous"
             
+            # Get the logged-in user's rating for this quiz, if available
+            if user_profile:
+                try:
+                    rating_obj = models.StarRating.objects.get(quiz=quiz, profile=user_profile)
+                    user_rating = rating_obj.stars
+                except models.StarRating.DoesNotExist:
+                    user_rating = 0
+            else:
+                user_rating = 0
+            
+            # Build the quiz dictionary including the id and user_rating
             quiz_list.append({
+                "id": quiz.id,  # Needed for rating submissions
                 "title": quiz.name,
                 "rating": avg_rating,
+                "user_rating": user_rating,
                 "category": category_name,
                 "creation_date": quiz.creation_date.isoformat(),
                 "id": quiz.id,

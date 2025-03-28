@@ -13,7 +13,7 @@ function openPopup(quiz) {
 
     newStartBtn.textContent = "Start Quiz";
     newStartBtn.addEventListener("click", () => {
-    window.location.href = `/Quizzical/quiz/`;
+      window.location.href = `/Quizzical/quiz/`;
     });
   }
 
@@ -43,7 +43,66 @@ function openPopup(quiz) {
       });
     }
   }
+
+  // If the user is authenticated, render the rating widget.
+  if (authenticated) {
+    renderUserRating(quiz);
+  }
 }
+
+// Generate the rating widget for the user to rate the quiz.
+function renderUserRating(quiz) {
+  const ratingContainer = document.getElementById("quiz-user-rating");
+  // If the user has already rated, use that value; otherwise, start at 0.
+  const currentRating = quiz.user_rating || 0;
+  let ratingHTML = "<p>Rate this quiz:</p>";
+
+  // Create 5 stars; each star is clickable.
+  for (let i = 1; i <= 5; i++) {
+    if (i <= currentRating) {
+      ratingHTML += `<span class="star clickable full" data-value="${i}">★</span>`;
+    } else {
+      ratingHTML += `<span class="star clickable" data-value="${i}">☆</span>`;
+    }
+  }
+  ratingContainer.innerHTML = ratingHTML;
+
+  // Add click listeners to stars.
+  const stars = ratingContainer.querySelectorAll(".star.clickable");
+  stars.forEach(star => {
+    star.addEventListener("click", function () {
+      const ratingValue = parseInt(this.getAttribute("data-value"));
+      submitRating(quiz.id, ratingValue);
+      // Optionally update the widget immediately
+      renderUserRating({ ...quiz, user_rating: ratingValue });
+    });
+  });
+}
+
+// Submit the rating to the server
+function submitRating(quizId, ratingValue) {
+  fetch("/Quizzical/rate_quiz/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      quiz_id: quizId,
+      rating: parseInt(ratingValue),
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert("Rating saved!");
+      window.location.reload(); // Refresh the page
+    } else {
+      alert("Failed to save rating: " + data.error);
+    }
+  })
+  .catch(error => console.error("Error:", error));
+}
+
 
 function saveQuiz(quizId) {
   fetch('save-quiz/', {
