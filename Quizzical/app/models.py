@@ -4,14 +4,8 @@ from django.core.exceptions import PermissionDenied, ValidationError
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    email = models.EmailField(unique=True)  # Ensure only unique email addresses
-    saved_quizes = models.CharField(max_length=256, blank=True, null=True)
-
-    def convert_saved_quizes(self, quizes: list) -> str:
-        return str(quizes).strip("[]")
-
-    def get_list_of_saved_quizes(self, quizes: str) -> list:
-        quiz_list = quizes.split(',')
+    email = models.EmailField(unique=True)
+    saved_quizes = models.ManyToManyField("Quiz", blank=True, related_name="saved_by_users")
 
     def __str__(self):
         return self.user.username
@@ -36,6 +30,7 @@ class Category(models.Model):
 
 class Quiz(models.Model):
     name = models.CharField(max_length=64)
+    id = models.AutoField(primary_key=True)
     views = models.IntegerField(default=0)
     creation_date = models.DateField(auto_now_add=True)
     category = models.ForeignKey(

@@ -3,12 +3,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 import json
 from app import models
 
 # Create your views here.
 def home(request):
     context_dict = {"educational": [], "fun": []}
+    saved_ids = []
+    if request.user.is_authenticated:
+        user_profile, _ = models.UserProfile.objects.get_or_create(user=request.user)
+        saved_ids = list(user_profile.saved_quizes.values_list('id', flat=True))
 
     try:
         # Fetch quizzes
@@ -28,7 +35,10 @@ def home(request):
         for quiz in quizzes:
             quiz_data = {
                 "title": quiz.name,
-                "rating": quiz_ratings[quiz.id]
+                "image": quiz.image,  # Since `Quiz` has no `image` field dont know if we are going to add
+                "rating": quiz_ratings[quiz.id],
+                "id": quiz.id,
+                'saved_by_user': quiz.id in saved_ids
             }
             if quiz.category and quiz.category.is_fun:
                 context_dict["fun"].append(quiz_data)
@@ -44,6 +54,31 @@ def home(request):
         "fun": context_dict["fun"],
         "quizzes": json.dumps(context_dict)
     })
+
+
+@csrf_exempt
+@login_required
+def toggle_save_quiz(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        quiz_id = data.get("quiz_id")
+        try:
+            quiz = models.Quiz.objects.get(id=quiz_id)
+            profile, _ = models.UserProfile.objects.get_or_create(user=request.user, defaults={'email': request.user.email})
+
+            if quiz in profile.saved_quizes.all():
+                profile.saved_quizes.remove(quiz)
+                return JsonResponse({"success": True, "action": "unsaved"})
+            else:
+                profile.saved_quizes.add(quiz)
+                return JsonResponse({"success": True, "action": "saved"})
+
+        except models.Quiz.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Quiz not found"}, status=404)
+
+    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
+
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -82,6 +117,10 @@ def create_quiz(request):
 
 def category(request):
     quiz_list = []
+    saved_ids = []
+    if request.user.is_authenticated:
+        profile, _ = models.UserProfile.objects.get_or_create(user=request.user)
+        saved_ids = list(profile.saved_quizes.values_list('id', flat=True))
     try:
         quizzes = models.Quiz.objects.all()
         for quiz in quizzes:
@@ -99,7 +138,10 @@ def category(request):
                 "title": quiz.name,
                 "rating": avg_rating,
                 "category": category_name,
-                "creation_date": quiz.creation_date.isoformat()
+                "creation_date": quiz.creation_date.isoformat(),
+                "id": quiz.id,
+                'saved_by_user': quiz.id in saved_ids
+
             })
     except Exception as e:
         print("Error loading quizzes:", e)

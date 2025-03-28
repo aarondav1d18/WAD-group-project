@@ -49,11 +49,15 @@ function openPopup(quiz) {
 
   // Decide what happens when the user clicks .save-btn
   if (authenticated) {
-    // If the user is logged in
-    newSaveButton.textContent = "Save Quiz";
+    const isSaved = quiz.saved_by_user;
+  
+    newSaveButton.textContent = isSaved ? "Unsave Quiz" : "Save Quiz";
+  
     newSaveButton.addEventListener("click", () => {
-      // Call a function that saves this quiz, e.g. via AJAX
-      saveQuiz(quiz.id);
+      toggleSaveQuiz(quiz.id, (updatedStatus) => {
+        quiz.saved_by_user = updatedStatus === "saved";
+        newSaveButton.textContent = quiz.saved_by_user ? "Unsave Quiz" : "Save Quiz";
+      });
     });
   } else {
     // If the user is NOT logged in
@@ -63,16 +67,54 @@ function openPopup(quiz) {
       window.location.href = "/Quizzical/login/";
     });
   }
+  
 
   // Finally, show the popup
   popup.classList.add("show");
 }
 
-// Simple example of a saveQuiz function
 function saveQuiz(quizId) {
-  console.log("Saving quiz with ID:", quizId);
-  // TODO: implement an actual save, e.g. via fetch() or AJAX to your Django endpoint
+  fetch('/Quizzical/save-quiz/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          alert("Quiz saved!");
+      } else {
+          alert("Failed to save quiz: " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error saving quiz:', error);
+  });
 }
+
+function toggleSaveQuiz(quizId, callback) {
+  fetch('/Quizzical/save-quiz/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          callback(data.action); // "saved" or "unsaved"
+      } else {
+          alert("Error: " + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error toggling quiz save:', error);
+  });
+}
+
 
 // Render quizzes based on search, category, and sort filters
 function renderQuizzes() {

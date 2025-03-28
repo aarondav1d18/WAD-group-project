@@ -17,4 +17,5 @@ urlpatterns = [
     path('category/', views.category, name='category'),
     path('quiz/', views.quiz, name='quiz'),
     path('logout/', views.user_logout, name='logout'),
+    path("save-quiz/", views.toggle_save_quiz, name="save_quiz"),
 ]
