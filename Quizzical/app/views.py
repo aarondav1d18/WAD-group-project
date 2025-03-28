@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 import json
 from app import models
+from app.models import UserProfile, Quiz
+
 
 # Create your views here.
 def home(request):
@@ -155,7 +157,66 @@ def user_logout(request):
 
 @login_required
 def account(request):
-    return render(request, 'app/base.html')
+    context_dict = {"saved": [], "myQuizzes": [],}
+    saved_ids = []
+    user_profile, _ = models.UserProfile.objects.get_or_create(user=request.user)
+    saved_ids = list(user_profile.saved_quizes.values_list('id', flat=True))
+
+    try:
+        savedQuizzes = [Quiz.objects.get(id=id) for id in saved_ids]
+        myQuizzes = models.Quiz.objects.filter(created_by=user_profile)
+
+        context_dict["userInfo"] = {
+            'username': user_profile.user.username,
+            'email': user_profile.user.email,
+        }
+
+        # Categorize quizzes
+        for quiz in savedQuizzes:
+            quiz_data = {
+                "id": quiz.id,
+                "title": quiz.name,
+                "image": quiz.image,  # Since `Quiz` has no `image` field dont know if we are going to add
+                'saved_by_user': quiz.id in saved_ids
+            }
+            # Add user's rating if available
+            if user_profile:
+                try:
+                    rating_obj = models.StarRating.objects.get(quiz=quiz, profile=user_profile)
+                    quiz_data["user_rating"] = rating_obj.stars
+                except models.StarRating.DoesNotExist:
+                    quiz_data["user_rating"] = 0
+            else:
+                quiz_data["user_rating"] = 0
+
+            context_dict['saved'].append(quiz_data)
+
+        for quiz in myQuizzes:
+            quiz_data = {
+                "id": quiz.id,
+                "title": quiz.name,
+                "image": quiz.image,  # Since `Quiz` has no `image` field dont know if we are going to add
+                'saved_by_user': quiz.id in saved_ids
+            }
+            # Add user's rating if available
+            if user_profile:
+                try:
+                    rating_obj = models.StarRating.objects.get(quiz=quiz, profile=user_profile)
+                    quiz_data["user_rating"] = rating_obj.stars
+                except models.StarRating.DoesNotExist:
+                    quiz_data["user_rating"] = 0
+            else:
+                quiz_data["user_rating"] = 0
+
+            context_dict['myQuizzes'].append(quiz_data)
+
+    except Exception as e:
+        print(f"Error loading quizzes: {e}")
+
+    # Include both the raw lists and the JSON version
+    return render(request, "app/account.html", {
+        "quizzes": json.dumps(context_dict)
+    })
 
 @login_required
 def create_quiz(request):
