@@ -20,7 +20,7 @@ from django.core.exceptions import ValidationError
 
 import json
 from app import models
-from app.models import UserProfile, Quiz
+from app.models import UserProfile, Quiz, Category
 
 
 # Create your views here.
@@ -293,7 +293,57 @@ def account(request):
 
 @login_required
 def create_quiz(request):
-    return render(request, 'app/base.html')
+    context = {"categories": Category.objects.all()}
+    
+    if request.method == "POST":
+        quiz_name = request.POST.get("quiz_name")
+        description = request.POST.get("description")
+        image = request.POST.get("image")
+        category_name = request.POST.get("category")
+
+        category = Category.objects.get(name=category_name)
+        user_profile = UserProfile.objects.get(user=request.user)
+        quiz = Quiz(
+            name=quiz_name,
+            description=description,
+            image=image.url,
+            category=category,
+            created_by=user_profile
+        )
+        quiz.save()
+
+        slide_number = 0
+        while request.POST.get(f"slide-question_{slide_number}"):
+            question = request.POST.get(f"slide-question_{slide_number}")
+            slide_image = request.FILES.get(f"slide-image_{slide_number}")
+            
+            slide = Slide(
+                question=question,
+                image=slide_image if slide_image else None,
+                quiz=quiz
+            )
+            slide.save()
+
+            for i in range(1, 5):
+                answer_text = request.POST.get(f"slide-answer{i}_{slide_number}")
+                is_correct = request.POST.get(f"slide-is-answer{i}_{slide_number}") == "on"
+                if answer_text:
+                    answer = Answer(
+                        text=answer_text,
+                        is_correct=is_correct,
+                        slide=slide
+                    )
+                    try:
+                        answer.save()
+                    except ValidationError as e:
+                        context['error_message'] = str(e)
+                        return render(request, 'app/create_quiz.html', context)
+
+            slide_number += 1
+
+        return redirect('app/home.html')
+
+    return render(request, 'app/create_quiz.html', context)
 
 def category(request):
     quiz_list = []

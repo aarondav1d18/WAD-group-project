@@ -4,7 +4,6 @@
 {% block title_block %}
     <title>Create Quiz</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/create_quiz.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}"/>
     <script src="{% static 'javascript/create_quiz.js' %}"></script>
 
     <style>
@@ -15,83 +14,68 @@
 {% endblock %}
 
 {% block body_block %}
+    <form id="create_quiz" method="post" action="{% url 'app:create_quiz' %}" enctype="multipart/form-data">
+        <div id="quiz-container">
+            <div id="quiz-information">
+                <h1>Create Quiz</h1>
+                <h2>Quiz Information</h2>
+                
+                {% csrf_token %}
+                <div class="form-entry">
+                    <label for="quiz-name">Name:</label>
+                    <input type="text" id="quiz-name" name="quiz_name" placeholder="Enter the quiz name"/>
+                </div>
 
-    <form id="quiz-info" method="post" action="{%url 'app:create_quiz' %}" enctype="multipart/form-data">
-        <h1>Create Quiz</h1>
-        <h2>Quiz Information</h2>
+                <div class="form-entry">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="6" placeholder="Enter a description..."></textarea>
+                </div>
+
+                <div class="form-entry">
+                    <label for="image-upload">Upload an Image:</label>
+                    <input type="file" id="image-upload" name="image" accept="image/*"/>
+                </div>
+
+                <div class="form-entry">
+                    <label for="category">Select a Category:</label>
+                    <select id="category" name="category">
+                        {% for category in categories %}
+                            <option value="{{ category.name }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <input id="submit" type="submit" value="Submit">
+            </div>
         
-        {% csrf_token %}
-        <div class="form-entry">
-            <label for="email">Name:</label>
-            <input type="email" name="email" type="submit" placeholder="Enter the quiz name"/>
+            <div id="slides">
+                <h2>Create Slides</h2>
+                <ol id="slides-list">
+                    <li id="slide_0">
+                        <h3>Question 1</h3>
+
+                        <div class="form-entry">
+                            <label for="slide-question_0">Slide Question:</label>
+                            <input type="text" id="slide-question_0" name="question_0" placeholder="Enter a question"/>
+                        </div>
+
+                        <div class="form-entry">
+                            <label for="slide-image_0">Slide Image:</label>
+                            <input type="file" id="slide-image_0" name="slide_image_0" accept="image/*"/>
+                        </div>
+
+                        {% for i in "1234" %}
+                            <div class="form-entry">
+                                <label for="answer{{ i }}_0">Answer {{ i }}:</label>
+                                <input type="text" id="answer{{ i }}_0" name="answer{{ i }}_0" placeholder="Enter answer {{ i }}"/>
+                                <input type="checkbox" id="is-answer{{ i }}_0" name="is-answer{{ i }}_0" value="yes">
+                            </div>
+                        {% endfor %}
+                    </li>
+                </ol>
+
+                <button type="button" id="create-new-slide">Create New Slide</button>
+            </div>
         </div>
-
-        <div>
-            <label for="long-text">Description:</label>
-            <textarea id="long-text" name="long_text" rows="6" cols="50" placeholder="Enter a description..."></textarea>
-        </div>
-
-        <div>
-            <img src="{% static 'images/placeholder.jpg' %}">
-            <label for="image-upload">Upload an Image:</label>
-            <input type="file" id="image-upload" name="image" accept="image/*"/>
-        </div>
-
-        <div>
-            <label for="category">Select a Category:</label>
-            <select id="category">
-                {% for category in categories %}
-                    <option value="{{ category.name }}">{{ category.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <h2>Create Slides</h2>
-        
-        <div>
-            <ol>
-                <li>
-                    <div class="form-entry">
-                        <label for="slide-question_0">Slide Question:</label>
-                        <input type="text" name="question_0" type="submit" placeholder="Enter a question"/>
-                    </div>
-
-                    <div class="form-entry">
-                        <label for="slide-image_0">Slide Image:</label>
-                        <input type="file" id="image-upload" name="image" accept="image/*"/>
-                    </div>
-
-                    <div class="form-entry">
-                        <label for="answer1_0">Answer 1:</label>
-                        <input type="text" name="answer1_0" type="submit" placeholder="Enter the first answer"/>
-                        <input type="checkbox" id="is-answer1_0" name="is-answer1_0" value="yes"/>
-                    </div>
-
-                    <div class="form-entry">
-                        <label for="answer2_0">Answer 2:</label>
-                        <input type="text" name="answer2_0" type="submit" placeholder="Enter the second answer"/>
-                        <input type="checkbox" id="is-answer2_0" name="is-answer2_0" value="no"/>
-                    </div>
-
-                    <div class="form-entry">
-                        <label for="answer3_0">Answer 3:</label>
-                        <input type="text" name="answer3_0" type="submit" placeholder="Enter the third answer"/>
-                        <input type="checkbox" id="is-answer3_0" name="is-answer3_0" value="no"/>
-                    </div>
-
-                    <div class="form-entry">
-                        <label for="answer4_0">Answer 4:</label>
-                        <input type="text" name="answer4_0" type="submit" placeholder="Enter the fourth answer"/>
-                        <input type="checkbox" id="is-answer4_0" name="is-answer4_0" value="no"/>
-                    </div>
-
-                    <input type="submit" value="Remove Question"/>
-                </li>
-            </ol>
-
-            <input type="submit" value="Create Question"/>
-        </div>
-        
-        <input type="submit" value="Submit">
     </form>
 {% endblock %}

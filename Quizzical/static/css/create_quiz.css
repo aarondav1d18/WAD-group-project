@@ -1,0 +1,145 @@
+form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.2), 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#quiz-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#quiz-information {
+    flex: 1;
+    min-width: 45%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#slides {
+    flex: 1;
+    min-width: 45%;
+    max-height: 665px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(130, 130, 130, 0.2);
+    box-sizing: border-box;
+}
+
+#quiz-information, #slides {
+    min-height: 500px;
+}
+
+.form-entry {
+    margin-bottom: 15px;
+}
+
+.form-entry label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-entry input, .form-entry select, .form-entry textarea {
+    width: calc(100% - 25px);
+    padding: 10px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(130, 130, 130, 0.2);
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-entry select {
+    width: 100%;
+}
+
+.form-entry option {
+    background: rgba(99, 99, 99, 0.3);
+}
+
+.form-entry textarea {
+    resize: none;
+    height: 150px;
+}
+
+.form-entry textarea::placeholder, .form-entry input::placeholder {
+    color: rgba(234, 234, 234, 0.7);
+    font-family: Arial, sans-serif;
+    font-style: italic;
+}
+
+.form-entry input[type="checkbox"] {
+    margin-top: 10px;
+    transform: scale(1.5);
+}
+
+#slides-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#slides-list li {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(130, 130, 130, 0.3);
+}
+
+#submit, #create-new-slide {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    background: teal;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 20px;
+}
+
+#submit:hover, #create-new-slide:hover {
+    background: rgb(0, 152, 152);
+}
+
+#slides::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+#slides::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#slides::-webkit-scrollbar-thumb {
+    background: rgb(221, 221, 221);
+    border-radius: 10px;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+}
+
+#slides::-webkit-scrollbar-thumb:hover {
+    background: rgb(255, 255, 255);
+}
