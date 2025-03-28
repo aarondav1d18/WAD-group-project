@@ -9,14 +9,6 @@
 {% endblock %}
 
 {% block body_block %}
-<style>
-  body {
-    background-image: url('{% static "images/background2.jpg" %}');
-  }
-</style>
-
-  
-
 <!-- Filters Section -->
 <div class="filters">
   <input type="text" id="search-input" placeholder="Search quizzes...">
@@ -46,6 +38,7 @@
     <span class="close-btn">&times;</span>
     <h3 id="quiz-title"></h3>
     <img id="quiz-image" src="" alt="Quiz Image">
+    <div id="quiz-user-rating"></div>
     <div class="popup-buttons">
       <button class="start-btn">Start Quiz</button>
       <button class="save-btn">Save Quiz</button>
@@ -66,7 +59,6 @@
   </script>
 {% endif %}
 <script>
-  const staticImagePath = "{% static 'images/' %}";
   const quizzes = JSON.parse('{{ quizzes|safe }}'); 
 </script>
 <script src="{% static 'javascript/category.js' %}"></script>

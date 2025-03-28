@@ -1,17 +1,16 @@
+import uuid
+from email.policy import default
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.forms import UUIDField
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    email = models.EmailField(unique=True)  # Ensure only unique email addresses
-    saved_quizes = models.CharField(max_length=256, blank=True, null=True)
-
-    def convert_saved_quizes(self, quizes: list) -> str:
-        return str(quizes).strip("[]")
-
-    def get_list_of_saved_quizes(self, quizes: str) -> list:
-        quiz_list = quizes.split(',')
+    email = models.EmailField(unique=True)
+    saved_quizes = models.ManyToManyField("Quiz", blank=True, related_name="saved_by_users")
 
     def __str__(self):
         return self.user.username
@@ -36,6 +35,7 @@ class Category(models.Model):
 
 class Quiz(models.Model):
     name = models.CharField(max_length=64)
+    id = models.AutoField(primary_key=True)
     views = models.IntegerField(default=0)
     creation_date = models.DateField(auto_now_add=True)
     category = models.ForeignKey(
@@ -48,8 +48,8 @@ class Quiz(models.Model):
     created_by = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="quizzes"
     )
-    # NEW: Image field to store the base image filename (located in static/images/)
-    image = models.CharField(max_length=255, default='default_quiz.jpg')
+    # Image field to store the full path to the image (can be either static or media path)
+    image = models.CharField(max_length=255, default='/static/images/default_quiz.jpg')
 
     def __str__(self):
         return self.name

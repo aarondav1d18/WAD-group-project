@@ -26,12 +26,19 @@ def populate():
     system_user.set_password('password')
     system_user.save()
 
+    # Create an additional user: 'test' with password 'test'
+    test_user, _ = User.objects.get_or_create(username='test', defaults={'email': 'test@example.com'})
+    test_user.set_password('test')
+    test_user.save()
+
+    # Create or get UserProfile for 'test'
+    UserProfile.objects.get_or_create(user=test_user, defaults={'email': test_user.email})
+
     # 2. Create or get a matching UserProfile
     system_profile, created_profile = UserProfile.objects.get_or_create(
         user=system_user,
         defaults={
             'email': system_user.email,
-            'saved_quizes': '',
         }
     )
 
@@ -42,10 +49,10 @@ def populate():
             'is_fun': True,
             'quizzes': [
                 {
-                    'name': 'Quiz 1',
+                    'name': 'General Knowledge Quiz',
                     'views': 10,
                     'stars': 1,
-                    'image': 'quiz1.jpg',  # located in static/images/quiz1.jpg
+                    'image': '/static/images/quiz1.jpg',  # Full path to the image
                     'questions': [
                         {
                             'question': 'What is the largest planet in our solar system?',
@@ -73,10 +80,10 @@ def populate():
             'is_fun': True,
             'quizzes': [
                 {
-                    'name': 'Quiz 2',
+                    'name': 'Entertainment Quiz',
                     'views': 20,
                     'stars': 2,
-                    'image': 'quiz2.jpg',
+                    'image': '/static/images/quiz2.jpg',
                     'questions': [
                         {
                             'question': 'Who sang the hit song "Thriller"?',
@@ -104,10 +111,10 @@ def populate():
             'is_fun': False,
             'quizzes': [
                 {
-                    'name': 'Quiz 3',
+                    'name': 'Science Quiz',
                     'views': 30,
                     'stars': 3,
-                    'image': 'quiz3.jpg',
+                    'image': '/static/images/quiz3.jpg',
                     'questions': [
                         {
                             'question': 'What gas do plants absorb from the atmosphere for photosynthesis?',
@@ -129,16 +136,52 @@ def populate():
                         },
                     ],
                 },
+                {
+                    'name': 'Science Quiz 2',
+                    'views': 35,
+                    'stars': 4,
+                    'image': '/static/images/quiz3.jpg',
+                    'questions': [
+                        {
+                            'question': 'What is the powerhouse of the cell?',
+                            'answers': [
+                                ('Ribosome', False),
+                                ('Mitochondria', True),
+                                ('Nucleus', False),
+                                ('Endoplasmic Reticulum', False),
+                            ],
+                        },
+                        {
+                            'question': 'What is the chemical symbol for gold?',
+                            'answers': [
+                                ('Au', True),
+                                ('Ag', False),
+                                ('Cu', False),
+                                ('Fe', False),
+                            ],
+                        },
+                        {
+                            'question': 'What is the largest mammal in the world?',
+                            'answers': [
+                                ('Blue Whale', True),
+                                ('Elephant', False),
+                                ('Giraffe', False),
+                                ('Hippopotamus', False),
+                            ],
+                        },
+
+                    ],
+                }   
             ],
         },
         'History': {
             'is_fun': False,
             'quizzes': [
                 {
-                    'name': 'Quiz 4',
+                    'name': 'History Quiz',
                     'views': 40,
                     'stars': 4,
-                    'image': 'quiz4.jpg',
+                    'image': '/static/images/quiz4.jpg',
                     'questions': [
                         {
                             'question': 'Who was the first woman to fly solo across the Atlantic Ocean?',
@@ -161,10 +204,10 @@ def populate():
                     ],
                 },
                 {
-                    'name': 'Quiz 5',
+                    'name': 'History Quiz 2',
                     'views': 50,
                     'stars': 5,
-                    'image': 'quiz5.jpg',
+                    'image': '/static/images/quiz5.jpg',
                     'questions': [
                         {
                             'question': 'In which year did the Titanic sink?',
