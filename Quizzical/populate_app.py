@@ -49,7 +49,7 @@ def populate():
             'is_fun': True,
             'quizzes': [
                 {
-                    'name': 'Quiz 1',
+                    'name': 'General Knowledge Quiz',
                     'views': 10,
                     'stars': 1,
                     'image': '/static/images/quiz1.jpg',  # Full path to the image
@@ -80,7 +80,7 @@ def populate():
             'is_fun': True,
             'quizzes': [
                 {
-                    'name': 'Quiz 2',
+                    'name': 'Entertainment Quiz',
                     'views': 20,
                     'stars': 2,
                     'image': '/static/images/quiz2.jpg',
@@ -111,7 +111,7 @@ def populate():
             'is_fun': False,
             'quizzes': [
                 {
-                    'name': 'Quiz 3',
+                    'name': 'Science Quiz',
                     'views': 30,
                     'stars': 3,
                     'image': '/static/images/quiz3.jpg',
@@ -136,13 +136,49 @@ def populate():
                         },
                     ],
                 },
+                {
+                    'name': 'Science Quiz 2',
+                    'views': 35,
+                    'stars': 4,
+                    'image': '/static/images/quiz3.jpg',
+                    'questions': [
+                        {
+                            'question': 'What is the powerhouse of the cell?',
+                            'answers': [
+                                ('Ribosome', False),
+                                ('Mitochondria', True),
+                                ('Nucleus', False),
+                                ('Endoplasmic Reticulum', False),
+                            ],
+                        },
+                        {
+                            'question': 'What is the chemical symbol for gold?',
+                            'answers': [
+                                ('Au', True),
+                                ('Ag', False),
+                                ('Cu', False),
+                                ('Fe', False),
+                            ],
+                        },
+                        {
+                            'question': 'What is the largest mammal in the world?',
+                            'answers': [
+                                ('Blue Whale', True),
+                                ('Elephant', False),
+                                ('Giraffe', False),
+                                ('Hippopotamus', False),
+                            ],
+                        },
+
+                    ],
+                }   
             ],
         },
         'History': {
             'is_fun': False,
             'quizzes': [
                 {
-                    'name': 'Quiz 4',
+                    'name': 'History Quiz',
                     'views': 40,
                     'stars': 4,
                     'image': '/static/images/quiz4.jpg',
@@ -168,7 +204,7 @@ def populate():
                     ],
                 },
                 {
-                    'name': 'Quiz 5',
+                    'name': 'History Quiz 2',
                     'views': 50,
                     'stars': 5,
                     'image': '/static/images/quiz5.jpg',
