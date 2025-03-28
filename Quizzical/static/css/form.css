@@ -6,7 +6,7 @@ form {
     border-radius: 12px;
     box-shadow: inset 0 4px 10px rgba(255, 255, 255, 0.2), 0 4px 10px rgba(0, 0, 0, 0.3);
     position: absolute;
-    top: 20%;
+    top: 15%;
     left: 50%;
     transform: translateX(-50%);
     width: 30%;
@@ -67,6 +67,11 @@ form p a:hover {
 .form-entry input:focus {
     border-color: teal;
     background: rgba(154, 154, 154, 0.2);
+}
+
+.form-entry p {
+    color: rgb(255, 70, 70);
+    margin-top: 5px;
 }
 
 #submit {

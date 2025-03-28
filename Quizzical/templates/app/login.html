@@ -13,18 +13,26 @@
 {% endblock %}
 
 {% block body_block %}
-    <form id="register" method="post" action="{%url 'app:signup' %}" enctype="multipart/form-data">
+    <form id="login" method="post" action="{%url 'app:login' %}" enctype="multipart/form-data">
         <h1>Log in</h1>
 
         {% csrf_token %}
         <div class="form-entry">
             <label for="email">Email:</label>
             <input type="email" name="email" type="submit" placeholder="Enter your email"/>
+            
+            {% if errors.email %}
+                <p>{{ errors.email|safe }}</p>
+            {% endif %}
         </div>
 
         <div class="form-entry">
             <label for="password">Password:</label>
-            <input type="password" name="password" type="submit" placeholder="Enter your password"/><br /> 
+            <input type="password" name="password" type="submit" placeholder="Enter your password"/>
+            
+            {% if errors.password %}
+                <p>{{ errors.password|safe }}</p>
+            {% endif %}
         </div>
 
         <input id="submit" type="submit" name="submit" value="Done"/>
