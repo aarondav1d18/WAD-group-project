@@ -298,18 +298,21 @@ def create_quiz(request):
     if request.method == "POST":
         quiz_name = request.POST.get("quiz_name")
         description = request.POST.get("description")
-        image = request.POST.get("image")
+        image = request.FILES.get("image")
         category_name = request.POST.get("category")
 
         category = Category.objects.get(name=category_name)
         user_profile = UserProfile.objects.get(user=request.user)
         quiz = Quiz(
             name=quiz_name,
-            description=description,
-            image=image.url,
+            #description=description,
             category=category,
             created_by=user_profile
         )
+
+        if image:
+            quiz.image = image
+
         quiz.save()
 
         slide_number = 0
@@ -341,7 +344,7 @@ def create_quiz(request):
 
             slide_number += 1
 
-        return redirect('app/home.html')
+        return render(request, 'app/create_quiz.html', context)
 
     return render(request, 'app/create_quiz.html', context)
 
