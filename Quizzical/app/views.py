@@ -310,6 +310,10 @@ def create_quiz(request):
             category=category,
             created_by=user_profile
         )
+
+        if image:
+            quiz.image = image
+
         quiz.save()
 
         slide_number = 0
@@ -341,7 +345,11 @@ def create_quiz(request):
 
             slide_number += 1
 
+<<<<<<< HEAD
         return redirect(reverse('app:home'))
+=======
+        return render(request, 'app/create_quiz.html', context)
+>>>>>>> origin/create-quiz-page
 
     return render(request, 'app/create_quiz.html', context)
 
