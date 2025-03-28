@@ -38,7 +38,7 @@ function openPopup(quiz) {
   document.querySelector(".start-btn").setAttribute("data-quiz-id", quiz.id);
 
   document.querySelector(".start-btn").addEventListener("click", () => {
-    window.location.href = `/Quizzical/quiz/`;
+    window.location.href = `/Quizzical/quiz/${quiz.title}/`;
   });
 
   // Grab the .save-btn in the popup

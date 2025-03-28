@@ -1,3 +1,11 @@
+from django.shortcuts import render
+import json
+from app import models
+# Create your views here.
+import json
+
+from app import models
+from app.models import Quiz, Slide, Answer
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -273,5 +281,20 @@ def category(request):
     context = {"quizzes": json.dumps(quiz_list)}
     return render(request, "app/category.html", context)
 
-def quiz(request):
-    return render(request, 'app/base.html')
+def quiz(request, title):
+    context = {}
+    try:
+        quiz = Quiz.objects.get(name=title)
+        slides = Slide.objects.filter(quiz=quiz)
+
+        context['name'] = quiz.name
+        context['questions'] = {}
+        context['answers'] = {}
+
+        for i in range(0,slides.count()):
+            context['questions'][i] = slides[i].question
+            context['answers'][i] = [(answer.text, answer.is_correct) for answer in Answer.objects.filter(slide=slides[i])]
+    except Exception as e:
+        print("Error loading quiz:", e)
+
+    return render(request, 'app/quiz.html', {'quiz': json.dumps(context)})

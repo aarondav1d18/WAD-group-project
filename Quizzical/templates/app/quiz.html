@@ -1,0 +1,46 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block title_block %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+    <style>
+        body {
+          background-image: url('{% static "images/background2.jpg" %}');
+        }
+    </style>
+{% endblock %}
+
+{% block body_block %}
+    <div id="quiz-body">
+        {% csrf_token %}
+        <div id="title-div">
+            <h1 id="quiz-title">{{ quiz.name }}</h1>
+        </div>
+
+        <div id="question-div">
+            <h2 id="question-text"></h2>
+        </div>
+        <div id="button-container"></div>
+        <div><button id="next-btn">Next Question</button></div>
+    </div>
+
+    <script src="{% static 'javascript/quiz.js' %}"></script>
+
+    <script>authenticated = false;</script>
+    {% if user.is_authenticated %}
+        <script>
+        authenticated = true;
+        </script>
+    {% else %}
+        <script>
+        authenticated = false;
+        </script>
+    {% endif %}
+
+    <script>
+        const quiz = JSON.parse('{{ quiz|safe }}');
+    </script>
+{% endblock %}
