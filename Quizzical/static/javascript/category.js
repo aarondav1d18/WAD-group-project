@@ -57,7 +57,6 @@ function openPopup(quiz) {
       toggleSaveQuiz(quiz.id, (updatedStatus) => {
         quiz.saved_by_user = updatedStatus === "saved";
         newSaveButton.textContent = quiz.saved_by_user ? "Unsave Quiz" : "Save Quiz";
-        document.getElementById("quiz-popup").classList.remove("show");
       });
     });
   } else {
@@ -84,7 +83,6 @@ function saveQuiz(quizId) {
   })
   .then(response => response.json())
   .then(data => {
-      document.getElementById("quiz-popup").classList.remove("show");
       if (data.success) {
           alert("Quiz saved!");
       } else {
