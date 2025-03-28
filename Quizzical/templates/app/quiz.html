@@ -18,36 +18,20 @@
         <h1 id="quiz-title">{{ quiz.name }}</h1>
     </div>
 
-    <div>
-        <form method="POST">
-            {% csrf_token %}
-            <div>
-                <ul id="answer-list">
-                    <li>
-                        <input type="radio" name="answer" id="0" value="0">
-                        <label class="answer-text" for="0"></label>
-                    </li>
-                    <li>
-                        <input type="radio" name="answer" id="1" value="1">
-                        <label class="answer-text" for="1"></label>
-                    </li>
-                    <li>
-                        <input type="radio" name="answer" id="2" value="2">
-                        <label class="answer-text" for="2"></label>
-                    </li>
-                    <li>
-                        <input type="radio" name="answer" id="3" value="3">
-                        <label class="answer-text" for="3"></label>
-                    </li>
-                </ul>
-            </div>
-            <input type="submit" value="Submit">
-        </form>
+    <div id="quiz-body">
+        {% csrf_token %}
+        <div>
+            <h2 id="question-text"></h2>
+        </div>
+        <div id="button-container"></div>
+        <div><button id="next-btn">Next Question</button></div>
     </div>
 
     <script src="{% static 'javascript/quiz.js' %}"></script>
 
     <script>
         const quiz = JSON.parse('{{ quiz|safe }}');
+        let question_number = 0;
+        let correct_answers = 0;
     </script>
 {% endblock %}

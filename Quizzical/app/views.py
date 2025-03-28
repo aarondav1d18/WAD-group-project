@@ -97,11 +97,14 @@ def quiz(request, title):
     context = {}
 
     quiz = Quiz.objects.get(name=title)
-    slides = Slide.objects.filter(quiz=quiz).order_by("?")
+    slides = Slide.objects.filter(quiz=quiz)
 
     context['name'] = quiz.name
-    context['quiz_data'] = {}
-    for slide in slides:
-        context['quiz_data'][slide.id] = slide.question
+    context['questions'] = {}
+    context['answers'] = {}
+
+    for i in range(0,slides.count()):
+        context['questions'][i] = slides[i].question
+        context['answers'][i] = [(answer.text, answer.is_correct) for answer in Answer.objects.filter(slide=slides[i])]
 
     return render(request, 'app/quiz.html', {'quiz': json.dumps(context)})
