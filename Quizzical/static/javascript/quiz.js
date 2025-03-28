@@ -1,3 +1,6 @@
+let question_number = 0;
+let correct_answers = 0;
+
 function load_initial(){
     document.getElementById('quiz-title').textContent = quiz.name;
 
@@ -56,8 +59,7 @@ function checkAnswer(event) {
 
 function endQuiz(){
     document.getElementById('button-container').innerHTML = "";
-    document.getElementById('question-text').textContent = "";
-    alert(correct_answers + " Answered Correctly");
+    document.getElementById('question-text').textContent = "You Got " + correct_answers + " Answers Correct!";
 
     const againButton = document.createElement("button");
     againButton.textContent = "Try Again";

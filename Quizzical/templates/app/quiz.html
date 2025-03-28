@@ -14,13 +14,13 @@
 {% endblock %}
 
 {% block body_block %}
-    <div>
-        <h1 id="quiz-title">{{ quiz.name }}</h1>
-    </div>
-
     <div id="quiz-body">
         {% csrf_token %}
-        <div>
+        <div id="title-div">
+            <h1 id="quiz-title">{{ quiz.name }}</h1>
+        </div>
+
+        <div id="question-div">
             <h2 id="question-text"></h2>
         </div>
         <div id="button-container"></div>
@@ -29,9 +29,18 @@
 
     <script src="{% static 'javascript/quiz.js' %}"></script>
 
+    <script>authenticated = false;</script>
+    {% if user.is_authenticated %}
+        <script>
+        authenticated = true;
+        </script>
+    {% else %}
+        <script>
+        authenticated = false;
+        </script>
+    {% endif %}
+
     <script>
         const quiz = JSON.parse('{{ quiz|safe }}');
-        let question_number = 0;
-        let correct_answers = 0;
     </script>
 {% endblock %}

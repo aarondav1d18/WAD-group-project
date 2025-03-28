@@ -95,16 +95,18 @@ def category(request):
 
 def quiz(request, title):
     context = {}
+    try:
+        quiz = Quiz.objects.get(name=title)
+        slides = Slide.objects.filter(quiz=quiz)
 
-    quiz = Quiz.objects.get(name=title)
-    slides = Slide.objects.filter(quiz=quiz)
+        context['name'] = quiz.name
+        context['questions'] = {}
+        context['answers'] = {}
 
-    context['name'] = quiz.name
-    context['questions'] = {}
-    context['answers'] = {}
-
-    for i in range(0,slides.count()):
-        context['questions'][i] = slides[i].question
-        context['answers'][i] = [(answer.text, answer.is_correct) for answer in Answer.objects.filter(slide=slides[i])]
+        for i in range(0,slides.count()):
+            context['questions'][i] = slides[i].question
+            context['answers'][i] = [(answer.text, answer.is_correct) for answer in Answer.objects.filter(slide=slides[i])]
+    except Exception as e:
+        print("Error loading quiz:", e)
 
     return render(request, 'app/quiz.html', {'quiz': json.dumps(context)})
