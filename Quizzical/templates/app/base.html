@@ -4,6 +4,14 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+        <style>
+            body {
+                background-image: url('{% static "images/background2.jpg" %}');
+                background-size: cover;           /* Scales the image to cover the container */
+                background-repeat: no-repeat;     /* Prevents the image from repeating */
+                background-position: center;      /* Centers the image in the viewport */
+            }
+        </style>
         {% block title_block %}
 
         {% endblock %}
