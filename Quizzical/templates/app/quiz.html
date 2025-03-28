@@ -27,20 +27,20 @@
         <div><button id="next-btn">Next Question</button></div>
     </div>
 
-    <script src="{% static 'javascript/quiz.js' %}"></script>
-
+    
     <script>authenticated = false;</script>
     {% if user.is_authenticated %}
-        <script>
+    <script>
         authenticated = true;
         </script>
     {% else %}
-        <script>
+    <script>
         authenticated = false;
         </script>
     {% endif %}
-
+    
     <script>
-        const quiz = JSON.parse('{{ quiz|safe }}');
+        const quiz = JSON.parse('{{ quiz|escapejs }}');
     </script>
+    <script src="{% static 'javascript/quiz.js' %}"></script>
 {% endblock %}
